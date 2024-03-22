@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "street-side-api"
+version = "0.0.1"
+description = "Backend of the Street Side project"
+authors = ["Vladimir Kondratyev"]
+
+[tool.poetry.dependencies]
+street-side-data-models = { path = "../street-side-data-models", develop = true }
+python = "~3.11.3"
+boto3 = "^1.26.11"
+fastapi = { extras = ["all"], version = "^0.104.1" }
+
+[tool.poetry.dev-dependencies]
+httpx = "0.24.0"
+flake8 = "^3.8.4"
+flake8-colors = "^0.1.9"
+taskipy = "^1.6.0"
+black = ">=22.3.0"
+isort = "^5.10.1"
+mypy = ">=0.931"
+pytest = "^6.2.1"
+pytest-cov = "^2.11.1"
+
+[tool.isort]
+profile = "black"
+line_length = 99
+known_first_party = ["aqemia"]
+
+[tool.black]
+line-length = 99
+skip-string-normalization = true
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.taskipy.tasks]
+lint = "flake8 --max-line-length 99 --ignore=E704,E203,W503,E501 . --exclude=.venv"
+check-typing = "mypy wet_collab_api"
+check-formatting-isort = "isort --check wet_collab_api tests"
+check-formatting-black = "black --check wet_collab_api tests"
+check-formatting = "task check-formatting-isort && task check-formatting-black"
+format-black = "black wet_collab_api tests"
+format-isort = "isort wet_collab_api tests"
+format = "task format-isort && task format-black"
+test = "python -m pytest tests/ --cov=."
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
