@@ -6,8 +6,8 @@ A shared repository for street-side application
 
 Here are the main services that live in this repository:
 
-- [StreetSide API](./street-side-api) - Main API of the app
-- [StreetSide Frontend](./) - Front-end for the street side api
+- [StreetSide API](./street-side-api) - App's api, build with Python/FastAPI
+- [StreetSide Frontend](./street-side-frontend) - React.js and Next.js front-end for the street side api interactions
 - [StreetSide Web Scrapping Worker](./) - Worker to web scrap documents
 
 
