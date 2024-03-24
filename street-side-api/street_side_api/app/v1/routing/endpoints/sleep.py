@@ -1,13 +1,16 @@
+import time
 from logging import getLogger
 
-import street_side_data_models.v1
 from fastapi import HTTPException, status
-
-import street_side_api.app.v1.methods.name
+from pydantic import BaseModel
 
 logger = getLogger(__name__)
 
-async def get_name() -> street_side_data_models.v1.Name:
+class OKStatusResponse(BaseModel):
+    status: str = "ok"
+    seconds: float = 0.0
+
+async def get_sleep(seconds: float) -> OKStatusResponse:
     """
     Retrieve the name of the app.
 
@@ -22,9 +25,13 @@ async def get_name() -> street_side_data_models.v1.Name:
         If an unexpected error occurs, raises a 500 internal server error status code.
     """
     try:
-        response = await street_side_api.app.v1.methods.name.get_name()
+        logger.warn(f"Sleeping for {seconds} seconds")
+        time.sleep(seconds)
     except Exception as e:
-        logger.exception(f"Error getting name of the app", exc_info=True)
+        logger.exception(f"Error waiting", exc_info=True)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     else:
-        return response
+        return OKStatusResponse(
+            status="ok",
+            seconds=seconds
+        )
