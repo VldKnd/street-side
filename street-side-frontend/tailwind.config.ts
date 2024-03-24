@@ -13,7 +13,7 @@ const config: Config = {
         'company-grey': '#31333F',
         'title-red': '#D85454',
         'background-black': '#1E1E1E',
-        'foreground-white': '#DCDCDC',
+        'foreground-white': '#B3B8BC',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

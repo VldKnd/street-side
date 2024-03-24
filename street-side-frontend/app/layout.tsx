@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Radio_Canada } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import NavigationHeader from "./components/NavigationHeader";
 
 const inter = Radio_Canada({ subsets: ["latin"] });
 
@@ -18,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} background-black`}>
-        <Link href="/" className="absolute mt-6 ml-6 text-3xl text-title-red">
-          {"StreetSide"}
-        </Link>
-        {children}
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <NavigationHeader />
+          {children}
+        </main>
       </body>
     </html>
   );
