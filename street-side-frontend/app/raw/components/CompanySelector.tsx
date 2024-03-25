@@ -1,7 +1,7 @@
 import Selector from './Selector';
 
 export default async function CompanySelector() {
-    await new Promise(resolve => setTimeout(resolve, 5000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     return (
         <div>
             <div className='relative w-1000 flex'>

@@ -2,7 +2,7 @@ export default async function Home() {
   return (
 
     <div className='h-full w-4/6'>
-      <div className='mb-3 ml-3'>
+      <div className='mb-10 ml-3'>
         <text className='font-bold text-company-grey text-2xl'>
           {`Welcome to the streets!`}
         </text>
