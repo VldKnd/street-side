@@ -6,24 +6,6 @@ ARG NODE_VERSION=21
 
 FROM node:${NODE_VERSION}-bookworm-slim AS base
 
-FROM base as dependencies
-ARG PROJECT_NAME_FOLDER
-ARG TOP_FOLDER
-ARG APP_NAME
-ARG APP_FOLDER
-
-RUN apk add --no-cache libc6-compat
-WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
-COPY package.json package-lock.json* ./
-
-RUN \
-    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
-
-
 # Rebuild the source code only when needed
 FROM base AS builder
 ARG PROJECT_NAME_FOLDER
@@ -32,54 +14,63 @@ ARG APP_NAME
 ARG APP_FOLDER
 
 WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
-COPY --from=deps /${TOP_FOLDER}/${APP_FOLDER}/node_modules ./node_modules
-COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/.eslintrc.json ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/next-env.d.ts ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/next.config.mjs ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/package-lock.json ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/package.json ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/postcss.config.js ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/README.md ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/tailwind.config.ts ./
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/tsconfig.json ./
 
-RUN \
-    if [ -f yarn.lock ]; then yarn run build; \
-    elif [ -f package-lock.json ]; then npm run build; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+RUN npm install;
 
-# Production image, copy all the files and run next
-FROM base AS runner
+# Dev image, copy all the files and run next
+FROM builder AS development
 ARG PROJECT_NAME_FOLDER
 ARG TOP_FOLDER
 ARG APP_NAME
 ARG APP_FOLDER
 
 WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
+COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/docker/dev-entrypoint.sh docker/entrypoint.sh
+CMD "./docker/entrypoint.sh"
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# # Production image, copy all the files and run next
+# FROM base AS production
+# ARG PROJECT_NAME_FOLDER
+# ARG TOP_FOLDER
+# ARG APP_NAME
+# ARG APP_FOLDER
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
 
-COPY --from=builder /${TOP_FOLDER}/${APP_FOLDER}/public ./public
+# ENV NODE_ENV production
+# # Uncomment the following line in case you want to disable telemetry during runtime.
+# # ENV NEXT_TELEMETRY_DISABLED 1
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 nextjs
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /${TOP_FOLDER}/${APP_FOLDER}/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /${TOP_FOLDER}/${APP_FOLDER}/.next/static ./.next/static
+# COPY --from=builder /${TOP_FOLDER}/${APP_FOLDER}/public ./public
 
-USER nextjs
+# # Set the correct permission for prerender cache
+# RUN mkdir .next
+# RUN chown nextjs:nodejs .next
 
-EXPOSE 3000
+# # Automatically leverage output traces to reduce image size
+# # https://nextjs.org/docs/advanced-features/output-file-tracing
+# COPY --from=builder --chown=nextjs:nodejs /${TOP_FOLDER}/${APP_FOLDER}/.next/standalone ./
+# COPY --from=builder --chown=nextjs:nodejs /${TOP_FOLDER}/${APP_FOLDER}/.next/static ./.next/static
 
-ENV PORT 3000
+# USER nextjs
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# EXPOSE 3000
+
+# ENV PORT 3000
+
+# # server.js is created by next build from the standalone output
+# # https://nextjs.org/docs/pages/api-reference/next-config-js/output
+# CMD HOSTNAME="0.0.0.0" node server.js

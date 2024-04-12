@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react'
+import { useClickAway } from "@uidotdev/usehooks";
 
 import DocumentSelector from '@/app/raw/components/DocumentSelector';
 import DownloadPeriodComponent from '@/app/raw/components/DownloadPeriodComponent';
@@ -8,19 +9,23 @@ import Document from '@/app/raw/components/Document';
 type SelectionCallback = (selected: string) => void
 
 function DropDownList(
-  { className, elements, placeholder, id, selectCallBack }:
-    { className: string, elements: string[], placeholder: string, id: string, selectCallBack?: SelectionCallback }
+  { className, elements, placeholder, id, selectCallback }:
+    { className: string, elements: string[], placeholder: string, id: string, selectCallback?: SelectionCallback }
 ) {
 
-  if (typeof selectCallBack === 'undefined') {
-    selectCallBack = (selected: string) => { }
+  if (typeof selectCallback === 'undefined') {
+    selectCallback = (selected: string) => { }
   }
 
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState('')
 
+  const ref = useClickAway(() => {
+    setIsOpen(false)
+  });
+
   return (
-    <div className={`${className}`} id={id}>
+    <div className={`${className}`} id={id} ref={ref}>
       <div>
         <button onClick={() => setIsOpen(!isOpen)} className='w-full h-full text-left text-base'>
           <p className='ml-4 mt-3 mb-2'>
@@ -34,7 +39,7 @@ function DropDownList(
             {elements.map((element, index) => {
               return (
                 <li
-                  onClick={() => { setIsOpen(!isOpen); setSelected(element); selectCallBack(element); }}
+                  onClick={() => { setIsOpen(!isOpen); setSelected(element); selectCallback(element); }}
                   className={
                     `flex hover:opacity-50 bg-company-grey ${index == (elements.length - 1) ? "rounded-b-2xl" : ""} ${index == 0 ? "rounded-t-2xl" : ""}`}>
                   <button onClick={() => setIsOpen(!isOpen)} className='w-full h-full text-left text-base'>
@@ -71,7 +76,7 @@ export default async function RawDocumentsPage() {
             className='relative inline-block w-full bg-company-grey rounded-2xl mb-3 text-foreground-white text-base'
             elements={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
             placeholder={"Click to select"}
-            selectCallBack={setSelectedClearingCompany}
+            selectCallback={setSelectedClearingCompany}
             id={'dropdown_list'}
           />
         </div>
@@ -87,7 +92,7 @@ export default async function RawDocumentsPage() {
                 className='relative inline-block w-full bg-company-grey rounded-2xl mb-3 text-foreground-white text-base'
                 elements={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
                 placeholder={"Click to select"}
-                selectCallBack={setSelectedDocument}
+                selectCallback={setSelectedDocument}
                 id={'dropdown_list'}
               />
             </div>

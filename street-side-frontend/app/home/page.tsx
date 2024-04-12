@@ -14,7 +14,7 @@ export default async function Home() {
       </div>
       <div>
         <p className="text-foreground-white text-sm indent-8">
-          Each clearing center publishes public, quarterly reports on its financial health, which must comply with the reporting rules recommended by the Bank of International Settlements. In practice, the reports are issued at different times, in different formats and are not centralized for quick analysis. This variety of documents increases the time required to analyze them.
+          Each clearing center distributes public, quarterly reports on its financial health, which must comply with the reporting rules recommended by the Bank of International Settlements. In practice, the reports are issued at different times, in different formats and are not centralized for quick analysis. This variety of documents increases the time required to analyze them.
         </p>
       </div>
       <div>
