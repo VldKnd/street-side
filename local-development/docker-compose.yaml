@@ -6,6 +6,10 @@ services:
       context: ../../
       dockerfile: ./street-side/street-side-api/docker/Dockerfile
       target: development
+    healthcheck:
+      test: /bin/sh -c "curl localhost:8080/health/"
+      timeout: 60s
+      retries: 1
     ports:
       - "8080:8080"
     volumes:
@@ -24,3 +28,18 @@ services:
         "/bin/sh",
         "/opt/street-side/street-side-api/docker/entrypoint.sh"
       ]
+
+  street-side-frontend:
+    build:
+      context: ../../
+      dockerfile: ./street-side/street-side-frontend/docker/Dockerfile
+      target: development
+    depends_on:
+      street-side-api:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../street-side-frontend/.next:/opt/street-side/street-side-frontend/.next
+      - ../street-side-frontend/app:/opt/street-side/street-side-frontend/app
+      - ../street-side-frontend/api:/opt/street-side/street-side-frontend/api
