@@ -20,6 +20,7 @@ isort = "^5.10.1"
 mypy = ">=0.931"
 pytest = "^6.2.1"
 pytest-cov = "^2.11.1"
+street-side-scrapper = { path = "../street-side-scrapper", develop = true }
 
 [tool.isort]
 profile = "black"
