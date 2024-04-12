@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "street-side-storage"
+version = "0.0.1"
+description = ""
+authors = ["VldKnd <kondratyev.w.i@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "street-side-storage" }]
+
+[tool.poetry.dependencies]
+python = "~3.11.3"
+pydantic = "^2.4.0"
+street-side-data-models = { path = "../street-side-data-models" }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
