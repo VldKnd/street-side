@@ -1,0 +1,74 @@
+[
+{
+    "company":"Cboe",
+    "url": "https://clear.cboe.com/europe/resources/documentation/public_disclosures/"
+},
+{
+    "company":"CMEGroup",
+    "url": "https://www.cmegroup.com/clearing/cpmi-iosco-reporting.html#cmeIOSCOReports"
+},
+{
+    "company":"DTCC",
+    "url": "https://www.dtcc.com/legal/policy-and-compliance"
+},
+{
+    "company":"The Dubai Commodities Clearing Corporation",
+    "url": "https://dccc.co.ae/overview/overview"
+},
+{
+    "company":"Eurex",
+    "url": "https://www.eurex.com/ec-en/find/about-us/regulatory-standards"
+},
+{
+    "company":"European Commodity Clearing",
+    "url": "https://www.ecc.de/en/about-ecc/company/reports"
+},
+{
+    "company":"HKFE Clearing Corporation Limited",
+    "url": "https://www.hkex.com.hk/Services/Clearing/Listed-Derivatives/CCP-Disclosures?sc_lang=en"
+},
+{
+    "company":"HKFE Clearing Corporation Limited",
+    "url": "https://www.hkex.com.hk/Services/Clearing/Securities/CCP-Disclosures?sc_lang=en"
+},
+{
+    "company":"ICE",
+    "url": "https://www.theice.com/clearing/quarterly-clearing-disclosures"
+},
+{
+    "company":"Japan Security Clearing Corporation",
+    "url": "https://www.jpx.co.jp/jscc/en/company/fmi-pdf2.html"
+},
+{
+    "company":"Krajowy Depozyt Papierów Wartościowych ",
+    "url": "https://www.kdpwccp.pl/en/cpmi-iosco-principles-for-financial-market-infrastructures.html"
+},
+{
+    "company":"LSEG",
+    "url": "https://www.lch.com/resources/ccp-disclosures"
+},
+{
+    "company":"MGEX",
+    "url": "https://www.mgex.com/regulation.html"
+},
+{
+    "company":"Nodal Clear",
+    "url": "https://www.nodalclear.com/regulation/nodal-clear-regulation/disclosure-framework/"
+},
+{
+    "company":"SGX",
+    "url": "https://www.sgx.com/regulation/principles-financial-market-infrastructures-disclosure"
+},
+{
+    "company":"Six-Group",
+    "url": "https://www.six-group.com/en/products-services/securities-services/clearing/info-center.html#scrollTo=cpmi-iosco-disclosure"
+},
+{
+    "company":"OOC",
+    "url": "https://www.theocc.com/risk-management/pfmi-disclosures"
+},
+{
+    "company":"ASX",
+    "url" : "https://www.asx.com.au/about/regulation/quantitative-disclosures-for-asx-clear-futures"
+}
+]
