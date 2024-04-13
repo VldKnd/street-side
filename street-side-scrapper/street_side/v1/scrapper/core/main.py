@@ -6,15 +6,16 @@ from web import scrape_and_download_data
 
 logger = getLogger(__name__)
 
-PATH_TO_CONFIGURATION = "../websites/test.json"
+DATASTORE_PATH = "datastore"
+PATH_TO_CONFIGURATION = "street_side_scrapper/v1/websites/ecc_only.json"
 
-def run_scrapper():
+def run():
     logger.info("Running the scrapper.")
 
-    file = open(PATH_TO_CONFIGURATION, 'r')
-    configuration = json.load(file)
-    file.close()
-
+    configuration_file = open(PATH_TO_CONFIGURATION, 'r')
+    configuration = json.load(configuration_file)
+    configuration_file.close()
+    
     scrapper_configuration = ScrapperConfiguration.model_validate(configuration)
     number_of_web_pages = len(scrapper_configuration.web_pages)
 
@@ -22,10 +23,10 @@ def run_scrapper():
 
     for i, web_page in enumerate(scrapper_configuration.web_pages):
         logger.info(f"{i + 1}/{number_of_web_pages} \t Scrapping {web_page.company_name}")
-
         scrape_and_download_data(
-            webpage=web_page
+            webpage=web_page,
+            workdir=DATASTORE_PATH,
         )
 
 if __name__ == '__main__':
-    run_scrapper()
+    run()

@@ -1,7 +1,7 @@
 from typing import List
 
 from pydantic import BaseModel
-from street_side_data_models.v1.web import WebPage
+from street_side.v1.data_models.web import WebPage
 
 
 class ScrapperConfiguration(BaseModel):

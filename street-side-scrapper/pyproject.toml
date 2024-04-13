@@ -4,7 +4,7 @@ version = "0.0.1"
 description = ""
 authors = ["VldKnd <kondratyev.w.i@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "street-side-scrapper" }]
+packages = [{ include = "street_side" }]
 
 [tool.poetry.dependencies]
 python = "~3.11.3"
@@ -12,7 +12,8 @@ requests = "^2.31.0"
 pandas = "^2.0.3"
 openpyxl = "^3.1.2"
 pydantic = "^2.4.0"
-street-side-data-models = { path = "../street-side-data-models" }
+street-side-data-models = { path = "../street-side-data-models", develop = true}
+street-side-storage = { path = "../street-side-storage", develop = true}
 beautifulsoup4 = "^4.12.3"
 
 [build-system]
