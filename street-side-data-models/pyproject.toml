@@ -1,13 +1,14 @@
 [tool.poetry]
 name = "street-side-data-models"
-version = "0.0.1"
+version = "0.0.2"
 description = "Python data models for the Street Side project"
 authors = ["Vladimir Kondratyev"]
-packages = [{ include = "street_side_data_models" }]
+packages = [{ include = "street_side" }]
 
 [tool.poetry.dependencies]
 python = "~3.11.3"
 pydantic = "^2.4.0"
+orjson = "^3.9.15"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
