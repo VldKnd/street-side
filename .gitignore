@@ -1,4 +1,4 @@
-./storage/*
+./datastore/*
 .idea
 .cache
 .venv
