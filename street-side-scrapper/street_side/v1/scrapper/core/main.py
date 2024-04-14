@@ -1,18 +1,35 @@
+import argparse
 import json
 from logging import getLogger
 
 from configuration import ScrapperConfiguration
+from street_side.v1.storage.disk_storage import DiskStorage
 from web import scrape_and_download_data
 
 logger = getLogger(__name__)
 
-DATASTORE_PATH = "datastore"
-PATH_TO_CONFIGURATION = "street_side_scrapper/v1/websites/ecc_only.json"
+def get_arguments():
+    parser = argparse.ArgumentParser(description='Simple scrapper for financial clearing documents.')
+    parser.add_argument(
+        '-d', '--datastore',
+        help='Absolute path to folder, where data will be stored.',
+        required=True,
+        dest="path_to_datastore"
+    )
+    parser.add_argument(
+        '-c','--configuration',
+        help='Absolute path to configuration of scrapper.',
+        required=True,
+        dest="path_to_configuration"
+    )
+    args = vars(parser.parse_args())
+    return args
 
-def run():
+def run(path_to_datastore: str, path_to_configuration: str):
     logger.info("Running the scrapper.")
+    disk_storage = DiskStorage(absolute_path_to_root=path_to_datastore)
 
-    configuration_file = open(PATH_TO_CONFIGURATION, 'r')
+    configuration_file = open(path_to_configuration, 'r')
     configuration = json.load(configuration_file)
     configuration_file.close()
     
@@ -25,8 +42,9 @@ def run():
         logger.info(f"{i + 1}/{number_of_web_pages} \t Scrapping {web_page.company_name}")
         scrape_and_download_data(
             webpage=web_page,
-            workdir=DATASTORE_PATH,
+            storage=disk_storage,
         )
 
 if __name__ == '__main__':
-    run()
+    keyword_arguments = get_arguments()
+    run(**keyword_arguments)
