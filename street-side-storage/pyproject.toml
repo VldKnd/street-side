@@ -10,6 +10,7 @@ packages = [{ include = "street_side" }]
 python = "~3.11.3"
 requests = "^2.31.0"
 pydantic = "^2.4.0"
+pydantic-settings = "^2.2.1"
 street-side-data-models = { path = "../street-side-data-models", develop = true}
 
 [build-system]

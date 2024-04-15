@@ -36,7 +36,7 @@ def save_file(content: Union[bytes, str], file_path: str) -> bool:
 def get_document_root_relative_path(document: RemoteDocument):
     return (
         f"{document.company_name}/" +\
-        f"{document.document_type}/" +\
+        f"{document.document_name}/" +\
         (f"{document.year}/" if document.year is not None else "") +\
         (f"{document.quater}/" if document.quater is not None else "") +\
         (f"{document.hash_id}")

@@ -2,13 +2,14 @@ import os
 from typing import List
 
 import pydantic
+from pydantic_settings import BaseSettings
 from street_side.v1.data_models.document import RemoteDocument
 
 import street_side.v1.storage.utils as v1_storage_utils
 
 
-class DiskStorage(pydantic.BaseModel):
-    absolute_path_to_root: str
+class DiskStorage(BaseSettings):
+    absolute_path_to_root: str = pydantic.Field(alias='STREET_SIDE_DATASTORE_PATH')
 
     def get_absolute_local_path_to_document(self, document: RemoteDocument):
         relative_path_to_document_folder = v1_storage_utils.get_document_root_relative_path(
@@ -36,6 +37,9 @@ class DiskStorage(pydantic.BaseModel):
         os.rmdir(local_absolute_path)
 
     def put(self, document: RemoteDocument) -> bool:
+        if self.is_document_downloaded(document):
+            return True
+        
         url = document.url
         local_absolute_path = self.get_absolute_local_path_to_document(
             document=document
@@ -48,9 +52,6 @@ class DiskStorage(pydantic.BaseModel):
         )
         document_file_path = f"{local_absolute_path}/{file_name}"
         document_metadata_path = f"{local_absolute_path}/{metadata_name}"
-
-        if self.is_document_downloaded(document):
-            return True
             
         if not v1_storage_utils.download_file(
             url=url,
@@ -71,12 +72,13 @@ class DiskStorage(pydantic.BaseModel):
         ...
 
     def list_companies(self) -> List[str]:
-        ...
+        return os.listdir(self.absolute_path_to_root)
 
-    def list_company_document_types(self, company_name: str) -> List[str]:
-        ...
+    def list_company_documents_names(self, company_name: str) -> List[str]:
+        path_to_company_folder = f"{self.absolute_path_to_root}/{company_name}"
+        return os.listdir(path_to_company_folder)
 
-    def get_company_document_type_metadata(
+    def list_company_document_years(
             self,
             company_name: str,
             document_type: str
