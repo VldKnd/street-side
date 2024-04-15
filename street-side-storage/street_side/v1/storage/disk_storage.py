@@ -3,7 +3,7 @@ from logging import getLogger
 from typing import List
 
 import pydantic
-from street_side.v1.data_models.document import RemoteDocument
+from street_side.v1.data_models.document import Document
 
 import street_side.v1.storage.utils as v1_storage_utils
 
@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 class DiskStorage(pydantic.BaseModel):
     absolute_path_to_root: str
 
-    def get_absolute_local_path_to_document(self, document: RemoteDocument):
+    def get_absolute_local_path_to_document(self, document: Document):
         relative_path_to_document_folder = v1_storage_utils.get_document_root_relative_path(
             document=document
         )
@@ -22,7 +22,7 @@ class DiskStorage(pydantic.BaseModel):
         )
         return local_absolute_path
 
-    def clean_up_document(self, document: RemoteDocument):
+    def clean_up_document(self, document: Document):
         local_absolute_path = self.get_absolute_local_path_to_document(
             document=document
         )
@@ -55,7 +55,7 @@ class DiskStorage(pydantic.BaseModel):
             os.rmdir(local_absolute_path)
             local_absolute_path = os.path.dirname(local_absolute_path)
 
-    def put(self, document: RemoteDocument) -> bool:
+    def put(self, document: Document) -> bool:
         if self.is_document_downloaded(document):
             return True
         
@@ -87,7 +87,7 @@ class DiskStorage(pydantic.BaseModel):
         
         return True
         
-    def fetch(self, identificator: str) -> RemoteDocument:
+    def fetch(self, identificator: str) -> Document:
         ...
 
     def list_companies_names(self) -> List[str]:
@@ -108,10 +108,10 @@ class DiskStorage(pydantic.BaseModel):
             self,
             company_name: str,
             document_type: str
-        ) -> List[RemoteDocument]:
+        ) -> List[Document]:
         ...
 
-    def is_document_downloaded(self, document: RemoteDocument) -> bool:
+    def is_document_downloaded(self, document: Document) -> bool:
         relative_path_to_document_folder = v1_storage_utils.get_document_root_relative_path(
             document=document
         )

@@ -3,7 +3,7 @@ from logging import getLogger
 from typing import Union
 
 import requests
-from street_side.v1.data_models.document import RemoteDocument
+from street_side.v1.data_models.document import Document
 
 logger = getLogger(__name__)
 
@@ -33,7 +33,7 @@ def save_file(content: Union[bytes, str], file_path: str) -> bool:
         return False
     
 
-def get_document_root_relative_path(document: RemoteDocument):
+def get_document_root_relative_path(document: Document):
     return (
         f"{document.company_name}/" +\
         f"{document.document_name}/" +\
@@ -42,9 +42,9 @@ def get_document_root_relative_path(document: RemoteDocument):
         (f"{document.hash_id}")
     )
 
-def get_document_file_name(document: RemoteDocument):
+def get_document_file_name(document: Document):
     _, file_extension = os.path.splitext(document.url)
     return f"file{file_extension}"
 
-def get_document_metadata_name(document: RemoteDocument):
+def get_document_metadata_name(document: Document):
     return f"metadada.json"
