@@ -2,12 +2,13 @@ from logging import getLogger
 from typing import List
 
 from fastapi import HTTPException, status
+from street_side.v1.data_models.web import WebPage
 
 import street_side_api.app.v1.methods.data
 
 logger = getLogger(__name__)
 
-async def get_all_companies() -> List[str]:
+async def get_all_companies() -> List[WebPage]:
     """
     Retrieve the name of the app.
 
@@ -27,7 +28,7 @@ async def get_all_companies() -> List[str]:
         logger.exception(f"Error getting companies from database", exc_info=True)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     else:
-        return response*10
+        return response
     
 async def get_document_names(company_name: str) -> List[str]:
     """
