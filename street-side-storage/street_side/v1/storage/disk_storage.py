@@ -1,15 +1,16 @@
 import os
+from logging import getLogger
 from typing import List
 
 import pydantic
-from pydantic_settings import BaseSettings
 from street_side.v1.data_models.document import RemoteDocument
 
 import street_side.v1.storage.utils as v1_storage_utils
 
+logger = getLogger(__name__)
 
-class DiskStorage(BaseSettings):
-    absolute_path_to_root: str = pydantic.Field(alias='STREET_SIDE_DATASTORE_PATH')
+class DiskStorage(pydantic.BaseModel):
+    absolute_path_to_root: str
 
     def get_absolute_local_path_to_document(self, document: RemoteDocument):
         relative_path_to_document_folder = v1_storage_utils.get_document_root_relative_path(
@@ -32,9 +33,27 @@ class DiskStorage(BaseSettings):
             document=document
         )
 
-        os.remove(f"{local_absolute_path}/{file_name}")
-        os.remove(f"{local_absolute_path}/{metadata_name}")
-        os.rmdir(local_absolute_path)
+        try:
+            os.remove(f"{local_absolute_path}/{file_name}")
+        except FileNotFoundError:
+            message = (
+                f"While deleting {document.company_name}, {document.document_name}"
+                f"file not found."
+            )
+            logger.info(message)
+
+        try:
+            os.remove(f"{local_absolute_path}/{metadata_name}")
+        except FileNotFoundError:
+            message = (
+                f"While deleting {document.company_name}, {document.document_name}"
+                f"metadata file not found."
+            )
+            logger.info(message)
+
+        while local_absolute_path != self.absolute_path_to_root:
+            os.rmdir(local_absolute_path)
+            local_absolute_path = os.path.dirname(local_absolute_path)
 
     def put(self, document: RemoteDocument) -> bool:
         if self.is_document_downloaded(document):
@@ -71,7 +90,7 @@ class DiskStorage(BaseSettings):
     def fetch(self, identificator: str) -> RemoteDocument:
         ...
 
-    def list_companies(self) -> List[str]:
+    def list_companies_names(self) -> List[str]:
         return os.listdir(self.absolute_path_to_root)
 
     def list_company_documents_names(self, company_name: str) -> List[str]:
