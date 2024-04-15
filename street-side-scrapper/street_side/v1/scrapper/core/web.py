@@ -1,10 +1,7 @@
-import os
-import zipfile
-from email.policy import default
-from logging import getLogger, root
+
+from logging import getLogger
 from typing import Callable, Dict, List
 
-import requests
 from street_side.v1.data_models.document import RemoteDocument
 from street_side.v1.data_models.web import WebPage
 from street_side.v1.storage.disk_storage import DiskStorage

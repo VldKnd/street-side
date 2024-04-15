@@ -1,6 +1,5 @@
-import datetime
 from logging import getLogger
-from typing import List, Set
+from typing import List
 from urllib.parse import urljoin
 
 import requests
