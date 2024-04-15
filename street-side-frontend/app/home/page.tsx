@@ -38,21 +38,21 @@ export default function Home() {
         </p>
       </div>
       <Transition show={(!isLoading && !error)}>
-        <div className='m-3'>
+        <div className='mt-10 mb-3 ml-3'>
           <text className='font-bold text-company-grey text-foreground-white'>
             {`Data is collected from`}
           </text>
         </div>
-        <div className="inline-flex">
+        <div className="flex flex-wrap">
           {
             (!isLoading && !error) ?
               data.map(
-                (company_name) => {
+                (web_page : { company_name: string, full_name: string, url: string}) => {
                   return (
-                    <div className={`text-base ml-0.5 mr-0.5 text-title-red hover:font-semibold hover:rounded-xl hover:bg-title-red hover:text-background-black`}>
-                      <p className={`ml-1 mr-1`}>
-                        {company_name}
-                      </p>
+                    <div className={`text-base m-0.5 border-solid border-2 border-title-red text-title-red rounded-xl hover:bg-title-red hover:text-background-black`}>
+                      <a className={`ml-2 mr-2`} href={web_page.url} target="_blank">
+                        {web_page.full_name}
+                      </a>
                     </div>
                   )
               }) : null
