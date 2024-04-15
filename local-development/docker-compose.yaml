@@ -13,8 +13,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - ../datastore:/opt/street-side/datastore
       - ../street-side-api/street_side_api:/opt/street-side/street-side-api/street_side_api
     environment:
+      - STREET_SIDE_DATASTORE_PATH=/opt/street-side/datastore
       - HOST=0.0.0.0
       - PORT=8080
       - RELOAD=true
