@@ -1,8 +1,10 @@
 
 from logging import getLogger
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Tuple
 
-from street_side.v1.data_models.document import RemoteDocument
+from street_side.v1.data_models.company import Company
+from street_side.v1.data_models.document import Document
+from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.web import WebPage
 from street_side.v1.storage.disk_storage import DiskStorage
 
@@ -10,7 +12,7 @@ from street_side.v1.scrapper.websites.ecc import find_and_filter_links
 
 logger = getLogger(__name__)
 
-COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[str, Callable[[WebPage], List[RemoteDocument]]] = {
+COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[str, Callable[[WebPage], Tuple[Company, List[DocumentType], List[Document]]]] = {
     "ecc": find_and_filter_links,
 }
 
@@ -25,5 +27,5 @@ def scrape_and_download_data(webpage: WebPage, storage: DiskStorage):
         return
     
     filtered_scrapped_documents = scrapper_function(webpage)
-    for scrapped_document in filtered_scrapped_documents:
-        storage.put(scrapped_document)
+    # for scrapped_document in filtered_scrapped_documents:
+    #     storage.put(scrapped_document)
