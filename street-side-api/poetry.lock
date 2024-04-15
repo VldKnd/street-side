@@ -1523,6 +1523,7 @@ develop = true
 
 [package.dependencies]
 pydantic = "^2.4.0"
+pydantic-settings = "^2.2.1"
 requests = "^2.31.0"
 street-side-data-models = {path = "../street-side-data-models", develop = true}
 
@@ -1922,4 +1923,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11.3"
-content-hash = "b77dfa9a943471572de51da87350618a7c9fd289b1c0d7b29579b726d2f13c8a"
+content-hash = "9303c48430dc60ff47b382caf5c5910976aff28206122ce3536cbb4336b3eae3"

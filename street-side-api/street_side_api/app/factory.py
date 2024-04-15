@@ -2,6 +2,7 @@ import logging
 import time
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from street_side_api.app.health import router as health_router
 from street_side_api.app.v1.routing.router import router as v1_router
@@ -16,6 +17,20 @@ def create_app() -> FastAPI:
         version="0.0.1",
     )
 
+    origins = [
+        "http://localhost",
+        "http://localhost:8080",
+        "http://localhost:3000",
+    ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
         start_time = time.time()

@@ -36,6 +36,7 @@ WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
 
 COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/poetry.lock ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/pyproject.toml ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/README.md  ./
 COPY ${PROJECT_NAME_FOLDER}/street-side-data-models ${TOP_FOLDER}/${APP_FOLDER}/../street-side-data-models
+COPY ${PROJECT_NAME_FOLDER}/street-side-storage ${TOP_FOLDER}/${APP_FOLDER}/../street-side-storage
 RUN poetry install --without dev
 COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/database ./database
 

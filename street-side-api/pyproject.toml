@@ -6,6 +6,7 @@ authors = ["Vladimir Kondratyev"]
 
 [tool.poetry.dependencies]
 street-side-data-models = { path = "../street-side-data-models", develop = true }
+street-side-storage = { path = "../street-side-storage", develop = true }
 python = "~3.11.3"
 boto3 = "^1.26.11"
 fastapi = { extras = ["all"], version = "^0.104.1" }
