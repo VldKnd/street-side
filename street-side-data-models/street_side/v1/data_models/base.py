@@ -62,6 +62,11 @@ def str_hash(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
 class BaseModelWithHashId(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(
+        extra="ignore",
+        frozen=True,
+    )
+
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, pydantic.BaseModel):
             self_type = self.__pydantic_generic_metadata__['origin'] or self.__class__
@@ -109,10 +114,6 @@ class BaseModelWithHashId(pydantic.BaseModel):
         str
             The hash of the JSON representation of the object.
         """
-        # Here we use model_dump() instead of model_dump_json() because
-        # model_dump_json() does not yet support keys sorting.
-        # Ideally, we would use model_dump_json(sort_keys=True) but this is not yet supported.
-        # See, https://github.com/pydantic/pydantic/issues/7424
         obj = self.model_dump()
         json_str = sorted_orjson_dumps(obj, default=tuple_default)
         return str_hash(json_str)
