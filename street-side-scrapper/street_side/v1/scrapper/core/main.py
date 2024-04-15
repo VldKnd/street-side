@@ -10,24 +10,27 @@ logger = getLogger(__name__)
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='Simple scrapper for financial clearing documents.')
+    
     parser.add_argument(
         '-d', '--datastore',
         help='Absolute path to folder, where data will be stored.',
         required=True,
         dest="path_to_datastore"
     )
+
     parser.add_argument(
         '-c','--configuration',
         help='Absolute path to configuration of scrapper.',
         required=True,
         dest="path_to_configuration"
     )
+
     args = vars(parser.parse_args())
     return args
 
 def run(path_to_datastore: str, path_to_configuration: str):
     logger.info("Running the scrapper.")
-    disk_storage = DiskStorage(absolute_path_to_root=path_to_datastore)
+    disk_storage = DiskStorage(STREET_SIDE_DATASTORE_PATH=path_to_datastore)
 
     configuration_file = open(path_to_configuration, 'r')
     configuration = json.load(configuration_file)

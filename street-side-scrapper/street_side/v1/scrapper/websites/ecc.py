@@ -49,7 +49,7 @@ def find_and_filter_links(web_page: WebPage) -> List[RemoteDocument]:
             scrapped_documents.append(
                 RemoteDocument(
                     company_name="ECC",
-                    document_type="PFMI",
+                    document_name="PFMI",
                     url=document_url,
                 )
             )
@@ -66,7 +66,7 @@ def find_and_filter_links(web_page: WebPage) -> List[RemoteDocument]:
             scrapped_documents.append(
                 RemoteDocument(
                     company_name="ECC",
-                    document_type="IOSCO",
+                    document_name="IOSCO",
                     year=year,
                     quater=quater,
                     url=document_url,
