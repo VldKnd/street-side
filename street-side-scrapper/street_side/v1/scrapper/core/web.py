@@ -12,7 +12,12 @@ from street_side.v1.scrapper.websites.ecc import find_and_filter_links
 
 logger = getLogger(__name__)
 
-COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[str, Callable[[WebPage], Tuple[Company, List[DocumentType], List[Document]]]] = {
+COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[
+    str,
+    Callable[
+        [WebPage],
+        Tuple[Company, Dict[str, DocumentType], Dict[str, Document]]]
+    ] = {
     "ecc": find_and_filter_links,
 }
 
@@ -26,6 +31,6 @@ def scrape_and_download_data(webpage: WebPage, storage: DiskStorage):
         logger.error(f"No scrapper function defined for {webpage.company_name}")
         return
     
-    filtered_scrapped_documents = scrapper_function(webpage)
+    company, scrapped_document_types, scrapped_documents = scrapper_function(webpage)
     # for scrapped_document in filtered_scrapped_documents:
     #     storage.put(scrapped_document)

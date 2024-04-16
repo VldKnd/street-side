@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from logging import getLogger
-from typing import List, Set, Tuple
+from typing import Dict, List, Set, Tuple
 from urllib.parse import urljoin
 
 import requests
@@ -20,7 +20,11 @@ ROMAN_TO_NATURAL = {
     "iv":"4",
 }
 
-def find_and_filter_links(web_page: WebPage) -> Tuple[Company, List[DocumentType], List[Document]]:
+def find_and_filter_links(web_page: WebPage) -> Tuple[
+        Company,
+        Dict[str, DocumentType],
+        Dict[str, Document]
+    ]:
     url = web_page.url
 
     response = requests.get(url)
@@ -32,8 +36,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[Company, List[DocumentType
         full_name="European Commodity Clearing",
         home_url="https://www.ecc.de/en/"
     )
-    scrapped_document_types: Set[DocumentType] = set()
-    scrapped_documents: List[Document] = []
+    scrapped_document_types: Dict[str, DocumentType] = {}
+    scrapped_documents: Dict[str, Document] = {}
 
     for table_row in soup.find_all('tr'):
         try:
@@ -55,65 +59,58 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[Company, List[DocumentType
         ):
             a_element = table_row.find("a")
             document_url = urljoin(url, a_element['href'])
-            document_type = DocumentType(
+            _, extension = os.path.splitext(document_url)
+            date = datetime.strptime(data_entry['publishing_date'], "%Y-%m-%d")
+
+            scrapped_document_type = DocumentType(
                 company_hash_id=scrapped_company.hash_id,
                 full_name="Principles for financial market infrastructures",
                 short_name="PFMI",
                 is_quaterly=False,
                 is_yearly=True
             )
-            scrapped_document_types.add(document_type)
-            _, extension = os.path.splitext(document_url)
-
-            date = datetime.strptime(
-                data_entry['publishing_date'],
-                "%Y-%m-%d"
-            )
-            scrapped_documents.append(
-                Document(
-                    document_type_id=document_type.hash_id,
+            scrapped_document = Document(
+                    document_type_id=scrapped_document_type.hash_id,
                     date_published=date,
                     quater=None,
                     year=date.strftime("%Y"),
                     remote_url=document_url,
                     extension=extension,
-                )
             )
+
+            scrapped_document_types[scrapped_document_type.hash_id] = scrapped_document_type
+            scrapped_documents[scrapped_document.hash_id] = scrapped_document
+
         elif (
             "iosco" in lowercase_title
         ):
             a_element = table_row.find("a")
             document_url = urljoin(url, a_element['href'])
-            document_type = DocumentType(
+            _, extension = os.path.splitext(document_url)
+            date = datetime.strptime(data_entry['publishing_date'], "%Y-%m-%d")
+            quater_as_roman_number_and_year = lowercase_title.split(" ")[-1]
+            quater_as_roman_number, year = quater_as_roman_number_and_year.split("/")
+            quater = ROMAN_TO_NATURAL[quater_as_roman_number]
+
+            scrapped_document_type = DocumentType(
                 company_hash_id=scrapped_company.hash_id,
                 full_name="International Organization of Securities Commissions",
                 short_name="IOSCO",
                 is_quaterly=True,
                 is_yearly=True
             )
-            scrapped_document_types.add(document_type)
-            _, extension = os.path.splitext(document_url)
-
-            date = datetime.strptime(
-                data_entry['publishing_date'],
-                "%Y-%m-%d"
-            )
-
-            quater_as_roman_number_and_year = lowercase_title.split(" ")[-1]
-            quater_as_roman_number, year = quater_as_roman_number_and_year.split("/")
-            quater = ROMAN_TO_NATURAL[quater_as_roman_number]
-
-            scrapped_documents.append(
-                Document(
-                    document_type_id=document_type.hash_id,
+            scrapped_document = Document(
+                    document_type_id=scrapped_document_type.hash_id,
                     date_published=date,
                     quater=quater,
                     year=year,
                     remote_url=document_url,
                     extension=extension,
                 )
-            )
+
+            scrapped_document_types[scrapped_document_type.hash_id] = scrapped_document_type
+            scrapped_documents[scrapped_document.hash_id] = scrapped_document
         else:
             continue
     
-    return scrapped_company, list(scrapped_document_types), scrapped_documents
+    return scrapped_company, scrapped_document_types, scrapped_documents
