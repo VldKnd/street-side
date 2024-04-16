@@ -14,6 +14,6 @@ class Document(FrozenBaseModelWithHashId):
     extension: str
 
     @property
-    def file_name(self):
+    def file_name_with_extension(self):
         remote_file_name_with_extension = os.path.basename(self.remote_url)
         return f"{self.hash_id}_{remote_file_name_with_extension}"
