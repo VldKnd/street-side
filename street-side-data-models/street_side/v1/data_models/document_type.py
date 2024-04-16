@@ -1,7 +1,7 @@
-from street_side.v1.data_models.base import BaseModelWithHashId
+from street_side.v1.data_models.base import FrozenBaseModelWithHashId
 
 
-class DocumentType(BaseModelWithHashId):
+class DocumentType(FrozenBaseModelWithHashId):
     company_hash_id: str
     full_name: str
     short_name: str

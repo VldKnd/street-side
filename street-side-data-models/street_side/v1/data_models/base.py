@@ -61,7 +61,7 @@ def str_hash(s: str) -> str:
     """
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
-class BaseModelWithHashId(pydantic.BaseModel):
+class FrozenBaseModelWithHashId(pydantic.BaseModel):
     model_config = pydantic.ConfigDict(
         extra="ignore",
         frozen=True,

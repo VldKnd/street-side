@@ -9,7 +9,9 @@ from street_side.v1.data_models.web import WebPage
 class StreetSideConfiguration(BaseModel):
     scrapper_web_pages: Dict[str, WebPage]
     datastore_path: str
-
+    postgres_dsn: str
+    database_pool_size: int = 1
+    
     @staticmethod
     def from_env_json_file() -> "StreetSideConfiguration":
         path_to_configuration_as_json = os.getenv("STREET_SIDE_CONFIGURATION_PATH")
