@@ -12,6 +12,7 @@ class Document(FrozenBaseModelWithHashId):
     year: Optional[str] = None
     remote_url: str
     extension: str
+    created_at: datetime.datetime | None = None
 
     @property
     def file_name_with_extension(self):
