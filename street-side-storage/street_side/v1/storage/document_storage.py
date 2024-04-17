@@ -34,17 +34,26 @@ class DocumentStorage(pydantic.BaseModel):
             document_on_local_disk.write(response.content)
 
     async def postgres_insert_scrapping_result(self, companies: Dict[str, Company], document_types: Dict[str, DocumentType], documents: Dict[str, Document]):
-        async with asyncpg.create_pool(self.postgres_dsn, min_size=1, max_size=1) as pool:
-            async with pool.acquire() as connection:
-                document_repository = DocumentRepository(connection=connection)
-                document_type_repository = DocumentTypeRepository(connection=connection)
-                company_repository = CompanyRepository(connection=connection)
+        company_connection = await asyncpg.connect(self.postgres_dsn)
+        company_repository = CompanyRepository(connection=company_connection)
 
-                await asyncio.gather(
-                    document_repository.insert(documents=documents),
-                    document_type_repository.insert(document_types=document_types),
-                    company_repository.insert(companies=companies),
-                )
+        document_repository_connection = await asyncpg.connect(self.postgres_dsn)
+        document_repository = DocumentRepository(connection=document_repository_connection)
+        
+        document_type_repository_connection = await asyncpg.connect(self.postgres_dsn)
+        document_type_repository = DocumentTypeRepository(connection=document_type_repository_connection)
+
+        await asyncio.gather(
+            document_repository.insert(documents=documents),
+            document_type_repository.insert(document_types=document_types),
+            company_repository.insert(companies=companies),
+        )
+
+        await asyncio.gather(
+            company_connection.close(),
+            document_repository_connection.close(),
+            document_type_repository_connection.close()
+        )
         
     def insert_and_download_scrapping_result(self, company: Company, document_types: Dict[str, DocumentType], documents: Dict[str, Document]):
         for hash_id, document in documents.items():

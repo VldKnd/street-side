@@ -45,6 +45,7 @@ class DocumentTypeRepository():
                 _object.is_quaterly,
                 _object.is_yearly,
                 hash_id,
+                _object.created_at,
             )
             for hash_id, _object in document_types.items()
         ]
@@ -86,7 +87,8 @@ class DocumentTypeRepository():
                 short_name,
                 is_quaterly,
                 is_yearly,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."document_types"
             WHERE
@@ -101,6 +103,7 @@ class DocumentTypeRepository():
                 short_name=row["short_name"],
                 is_quaterly=row["is_quaterly"],
                 is_yearly=row["is_yearly"],
+                created_at=row["created_at"]
             ) for row in records
         }
     
@@ -113,7 +116,8 @@ class DocumentTypeRepository():
                 short_name,
                 is_quaterly,
                 is_yearly,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."document_types"
             WHERE
@@ -128,6 +132,7 @@ class DocumentTypeRepository():
                 short_name=row["short_name"],
                 is_quaterly=row["is_quaterly"],
                 is_yearly=row["is_yearly"],
+                created_at=row["created_at"]
             ) for row in records
         }
     
@@ -140,7 +145,8 @@ class DocumentTypeRepository():
                 short_name,
                 is_quaterly,
                 is_yearly,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."document_types"
             WHERE
@@ -155,5 +161,6 @@ class DocumentTypeRepository():
                 short_name=row["short_name"],
                 is_quaterly=row["is_quaterly"],
                 is_yearly=row["is_yearly"],
+                created_at=row["created_at"]
             ) for row in records
         }

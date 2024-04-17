@@ -39,14 +39,15 @@ class CompanyRepository():
 
         tuples_to_insert = [
             (
+                hash_id,
                 _object.short_name,
                 _object.full_name,
                 _object.home_url,
-                hash_id,
+                _object.created_at,
             )
             for hash_id, _object in companies.items()
         ]
-        
+
         await self._connection.execute(
             """
             INSERT INTO "v1"."companies" (
@@ -78,7 +79,8 @@ class CompanyRepository():
                 short_name,
                 full_name,
                 home_url,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."companies"
             WHERE
@@ -91,6 +93,7 @@ class CompanyRepository():
                 short_name=row["short_name"],
                 full_name=row["full_name"],
                 home_url=row["home_url"],
+                created_at=row["created_at"],
             ) for row in records
         }
     
@@ -101,7 +104,8 @@ class CompanyRepository():
                 short_name,
                 full_name,
                 home_url,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."companies"
             WHERE
@@ -114,6 +118,7 @@ class CompanyRepository():
                 short_name=row["short_name"],
                 full_name=row["full_name"],
                 home_url=row["home_url"],
+                created_at=row["created_at"],
             ) for row in records
         }
     
@@ -124,7 +129,8 @@ class CompanyRepository():
                 short_name,
                 full_name,
                 home_url,
-                hash_id
+                hash_id,
+                created_at
             FROM
                 "v1"."companies"
             WHERE
@@ -137,5 +143,6 @@ class CompanyRepository():
                 short_name=row["short_name"],
                 full_name=row["full_name"],
                 home_url=row["home_url"],
+                created_at=row["created_at"],
             ) for row in records
         }

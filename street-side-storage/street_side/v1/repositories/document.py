@@ -43,14 +43,14 @@ class DocumentRepository():
                 _object.date_published,
                 _object.quater,
                 _object.year,
-                _object.file_name,
                 _object.remote_url,
                 _object.extension,
                 hash_id,
+                _object.created_at,
             )
             for hash_id, _object in documents.items()
         ]
-        
+            
         await self._connection.execute(
             """
             INSERT INTO "v1"."documents" (
@@ -58,10 +58,9 @@ class DocumentRepository():
                 "date_published",
                 "quater",
                 "year",
-                "file_name",
                 "remote_url",
                 "extension",
-                "hash_id",
+                "hash_id"
             )
             (
                 SELECT
@@ -69,10 +68,9 @@ class DocumentRepository():
                     record.date_published,
                     record.quater,
                     record.year,
-                    record.file_name,
                     record.remote_url,
                     record.extension,
-                    record.hash_id,
+                    record.hash_id
                 FROM
                     unnest($1::"v1"."documents"[]) as record
             )
@@ -91,10 +89,10 @@ class DocumentRepository():
                 date_published,
                 quater,
                 year,
-                file_name,
                 remote_url,
                 extension,
                 hash_id,
+                created_at
             FROM
                 "v1"."documents"
             WHERE
@@ -110,5 +108,6 @@ class DocumentRepository():
                 year=row["year"],
                 remote_url=row["remote_url"],
                 extension=row["extension"],
+                created_at=row["created_at"]
             ) for row in records
         }
