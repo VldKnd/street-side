@@ -1,11 +1,29 @@
 version: "3.9"
 
 services:
+  postgres:
+    image: postgres:14.5-alpine3.16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=street-side
+    volumes:
+      - ../datastore/postgres/:/var/lib/postgresql/data
+    healthcheck:
+      test: /bin/sh -c 'pg_isready -U postgres -d postgres || exit 1'
+      interval: 5s
+      timeout: 60s
+      retries: 12
+    ports:
+      - "5432:5432"
   street-side-api:
     build:
       context: ../../
       dockerfile: ./street-side/street-side-api/docker/Dockerfile
       target: development
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: /bin/sh -c "curl localhost:8080/health/"
       timeout: 60s
@@ -14,7 +32,7 @@ services:
       - "8080:8080"
     volumes:
       - ../configuration:/opt/street-side/configuration
-      - ../datastore:/opt/street-side/datastore
+      - ../datastore/storage:/opt/street-side/datastore/storage
       - ../street-side-api/street_side_api:/opt/street-side/street-side-api/street_side_api
     environment:
       - STREET_SIDE_CONFIGURATION_PATH=/opt/street-side/configuration/docker_only_ecc.json
@@ -23,6 +41,7 @@ services:
       - RELOAD=true
       - LOG_CONFIG=/opt/street-side/street-side-api/street_side_api/log_config.json
       - WORKERS=1
+      - POSTGRES_DSN=${POSTGRES_DSN}
       - ASYNCPG_MIN_POOL_SIZE=20
       - ASYNCPG_MAX_POOL_SIZE=20
       - ENVIRONMENT=LOCAL
