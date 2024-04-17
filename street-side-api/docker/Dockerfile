@@ -26,13 +26,18 @@ ENV \
     POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_NO_INTERACTION=1
 
+    
+# Install project dependencies
+WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
+
+RUN apt update \
+    && apt install -y curl \
+    && curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
+
 # Install poetry
 RUN apt update && \
     apt install -y curl && \
     curl -sSL https://install.python-poetry.org | POETRY_HOME=${POETRY_HOME} POETRY_VERSION=${POETRY_VERSION} python3 -
-
-# Install project dependencies
-WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
 
 COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/poetry.lock ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/pyproject.toml ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/README.md  ./
 COPY ${PROJECT_NAME_FOLDER}/street-side-data-models ${TOP_FOLDER}/${APP_FOLDER}/../street-side-data-models
@@ -60,6 +65,7 @@ RUN apt-get update\
 
 COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/docker/wait-for.sh ${TOP_FOLDER}/${APP_FOLDER}/docker/wait-for.sh
 COPY ${PROJECT_NAME_FOLDER}/${APP_FOLDER}/docker/dev-entrypoint.sh ${TOP_FOLDER}/${APP_FOLDER}/docker/entrypoint.sh
+COPY --from=staging ${TOP_FOLDER}/${APP_FOLDER}/migrate ${TOP_FOLDER}/${APP_FOLDER}/docker/migrate
 ENTRYPOINT [ "./docker/entrypoint.sh" ]
 
 #

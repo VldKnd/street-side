@@ -1,10 +1,9 @@
 from logging import getLogger
-
-import street_side.v1.data_models.name
+from typing import Dict
 
 logger = getLogger(__name__)
 
-async def get_name() -> street_side.v1.data_models.name.Name:
+async def get_name() -> Dict[str, str]:
     """
     Get the name of the project.
 
@@ -14,4 +13,4 @@ async def get_name() -> street_side.v1.data_models.name.Name:
         The name of the project.
     """
     logger.info("Getting the name of the project.")
-    return street_side.v1.data_models.name.Name(name="Street Side")
+    return { "name":"Street-Side" }

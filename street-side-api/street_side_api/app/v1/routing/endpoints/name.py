@@ -1,13 +1,13 @@
 from logging import getLogger
+from typing import Dict
 
-import street_side.v1.data_models.name
 from fastapi import HTTPException, status
 
 import street_side_api.app.v1.methods.name
 
 logger = getLogger(__name__)
 
-async def get_name() -> street_side.v1.data_models.name.Name:
+async def get_name() -> Dict[str, str]:
     """
     Retrieve the name of the app.
 
