@@ -1,12 +1,12 @@
 
 from logging import getLogger
-from typing import Callable, Dict, List, Tuple
+from typing import Callable, Dict, Tuple
 
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.web import WebPage
-from street_side.v1.storage.disk_storage import DiskStorage
+from street_side.v1.storage.document_storage import DocumentStorage
 
 from street_side.v1.scrapper.websites.ecc import find_and_filter_links
 
@@ -21,7 +21,7 @@ COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[
     "ecc": find_and_filter_links,
 }
 
-def scrape_and_download_data(webpage: WebPage, storage: DiskStorage):
+def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
     scrapper_function = COMPANY_NAME_TO_SCRAPPER_FUNCTION.get(
         webpage.company_name.lower(),
         None,
@@ -32,5 +32,8 @@ def scrape_and_download_data(webpage: WebPage, storage: DiskStorage):
         return
     
     company, scrapped_document_types, scrapped_documents = scrapper_function(webpage)
-    # for scrapped_document in filtered_scrapped_documents:
-    #     storage.put(scrapped_document)
+    storage.insert_and_download_scrapping_result(
+        company=company,
+        document_types=scrapped_document_types,\
+        documents=scrapped_documents,
+    )
