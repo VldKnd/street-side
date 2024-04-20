@@ -107,7 +107,11 @@ class DocumentTypeRepository():
             ) for row in records
         }
     
-    async def fetch_by_full_names(self, full_names: List[str]) -> Dict[str, DocumentType]:
+    async def fetch_by_short_names_and_company_hash_id(
+            self,
+            short_name: str,
+            company_hash_id: str
+        ) -> Dict[str, DocumentType]:
         records = await self._connection.fetch(
             """
             SELECT
@@ -121,41 +125,17 @@ class DocumentTypeRepository():
             FROM
                 "v1"."document_types"
             WHERE
-                full_name = ANY($1)
+                company_hash_id=$1
+                AND
+                short_name=$2
             """,
-            list(set(full_names)),
+            company_hash_id,
+            short_name,
         )
+
         return {
-            row["hash_id"]: DocumentType(
-                company_hash_id=row["company_hash_id"],
-                full_name=row["full_name"],
-                short_name=row["short_name"],
-                is_quaterly=row["is_quaterly"],
-                is_yearly=row["is_yearly"],
-                created_at=row["created_at"]
-            ) for row in records
-        }
-    
-    async def fetch_by_short_names(self, short_names: List[str]) -> Dict[str, DocumentType]:
-        records = await self._connection.fetch(
-            """
-            SELECT
-                company_hash_id,
-                full_name,
-                short_name,
-                is_quaterly,
-                is_yearly,
-                hash_id,
-                created_at
-            FROM
-                "v1"."document_types"
-            WHERE
-                full_name = ANY($1)
-            """,
-            list(set(short_names)),
-        )
-        return {
-            row["hash_id"]: DocumentType(
+            row["company_hash_id"] + row["short_name"]:
+            DocumentType(
                 company_hash_id=row["company_hash_id"],
                 full_name=row["full_name"],
                 short_name=row["short_name"],

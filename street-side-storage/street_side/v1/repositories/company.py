@@ -96,32 +96,7 @@ class CompanyRepository():
                 created_at=row["created_at"],
             ) for row in records
         }
-    
-    async def fetch_by_full_names(self, full_names: List[str]) -> Dict[str, Company]:
-        records = await self._connection.fetch(
-            """
-            SELECT
-                short_name,
-                full_name,
-                home_url,
-                hash_id,
-                created_at
-            FROM
-                "v1"."companies"
-            WHERE
-                full_name = ANY($1)
-            """,
-            list(set(full_names)),
-        )
-        return {
-            row["hash_id"]: Company(
-                short_name=row["short_name"],
-                full_name=row["full_name"],
-                home_url=row["home_url"],
-                created_at=row["created_at"],
-            ) for row in records
-        }
-    
+   
     async def fetch_by_short_names(self, short_names: List[str]) -> Dict[str, Company]:
         records = await self._connection.fetch(
             """
@@ -134,12 +109,12 @@ class CompanyRepository():
             FROM
                 "v1"."companies"
             WHERE
-                full_name = ANY($1)
+                short_name = ANY($1)
             """,
             list(set(short_names)),
         )
         return {
-            row["hash_id"]: Company(
+            row["short_name"]: Company(
                 short_name=row["short_name"],
                 full_name=row["full_name"],
                 home_url=row["home_url"],
