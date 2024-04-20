@@ -1,4 +1,5 @@
 
+import asyncio
 from logging import getLogger
 from typing import Callable, Dict, Tuple
 
@@ -32,6 +33,7 @@ def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
         return
     
     company, scrapped_document_types, scrapped_documents = scrapper_function(webpage)
+    
     storage.insert_and_download_scrapping_result(
         company=company,
         document_types=scrapped_document_types,\
