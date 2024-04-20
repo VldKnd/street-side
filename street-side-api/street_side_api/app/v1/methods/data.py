@@ -1,17 +1,84 @@
 
 from logging import getLogger
-from typing import List
+from typing import List, Tuple
 
 from street_side.v1.data_models.configuration import StreetSideConfiguration
-from street_side.v1.data_models.web import WebPage
-from street_side.v1.storage.disk_storage import DiskStorage
+from street_side.v1.storage.document_storage import DocumentStorage
+
+import street_side_api.app.v1.methods.data
+from street_side_api.app.v1.data.company import CompanyGetRequestResponse
+from street_side_api.app.v1.data.document_types import DocumentTypeGetRequestResponse
+from street_side_api.app.v1.data.documents import DocumentGetRequestResponse
 
 logger = getLogger(__name__)
 
 APPLICATION_CONFIGURATION = StreetSideConfiguration.from_env_json_file()
-DISK_STORAGE = DiskStorage(absolute_path_to_root=APPLICATION_CONFIGURATION.datastore_path)
+DOCUMENT_STORAGE = DocumentStorage(
+    path_to_document_storage=APPLICATION_CONFIGURATION.datastore_path,
+    postgres_dsn=APPLICATION_CONFIGURATION.postgres_dsn
+)
 
-async def get_all_companies() -> List[WebPage]:
+async def get_file_path_and_name_by_document_hash_id(document_hash_id: str) -> Tuple[str, str]:
+    return await DOCUMENT_STORAGE.get_file_path_and_name_by_document_hash_id(document_hash_id=document_hash_id)
+
+async def get_file_as_base64_by_document_hash_id(document_hash_id: str) -> str:
+    document_as_base64 = await DOCUMENT_STORAGE.get_file_as_base64_by_document_hash_id(
+        document_hash_id=document_hash_id
+    )
+
+    if document_as_base64 is None:
+        raise RuntimeError("Document was not properly loaded. It is likely not present on the disk.")
+
+    return document_as_base64
+    
+async def get_documents_by_document_type_hash_id(
+        document_type_hash_id: str
+    ) -> List[DocumentGetRequestResponse]:
+    """
+    Get documents of document type using its short name and company hash id.
+
+    Returns
+    -------
+    NameResponse
+        The name of the project.
+    """
+    documents = await DOCUMENT_STORAGE.get_documents_by_document_type_hash_id(
+        document_type_hash_id=document_type_hash_id
+    )
+
+    return [
+        DocumentGetRequestResponse(
+            document_type_id=document.document_type_id,
+            date_published=document.date_published,
+            quater=document.quater,
+            year=document.year,
+            pretty_date=f"{document.year}" + (document.quater is not None)*f" Q{document.quater}",
+            remote_url=document.remote_url,
+            extension=document.extension,
+            created_at=document.created_at,
+            hash_id=document.hash_id,
+        ) for document in documents
+    ]
+
+
+async def get_document_types_by_company_hash_id(company_hash_id: str) -> List[DocumentTypeGetRequestResponse]:
+    document_types =  await DOCUMENT_STORAGE.get_document_types_by_company_hash_id(
+        company_hash_id=company_hash_id
+    )
+
+    return [
+        DocumentTypeGetRequestResponse(
+            company_hash_id=document_type.company_hash_id,
+            full_name=document_type.full_name,
+            short_name=document_type.short_name,
+            is_quaterly=document_type.is_quaterly,
+            is_yearly=document_type.is_yearly,
+            created_at=document_type.created_at,
+            hash_id=document_type.hash_id
+        ) for document_type in document_types
+    ]
+
+async def get_all_companies() -> List[CompanyGetRequestResponse]:
     """
     Get the name of the project.
 
@@ -20,13 +87,13 @@ async def get_all_companies() -> List[WebPage]:
     NameResponse
         The name of the project.
     """
-    companies_names = DISK_STORAGE.list_companies_names()
-    
+    companies = await DOCUMENT_STORAGE.get_all_companies()
     return [
-        APPLICATION_CONFIGURATION.scrapper_web_pages[company_name]
-        for company_name in companies_names
-        if company_name in APPLICATION_CONFIGURATION.scrapper_web_pages
-    ] * 10
-
-async def get_documents_names(company_name: str) -> List[str]:
-    return DISK_STORAGE.list_company_documents_names(company_name)
+        CompanyGetRequestResponse(
+            short_name=company.short_name,
+            full_name=company.full_name,
+            home_url=company.home_url,
+            created_at=company.created_at,
+            hash_id=company.hash_id
+        ) for company in companies
+    ]
