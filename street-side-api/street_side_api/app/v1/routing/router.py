@@ -8,6 +8,14 @@ import street_side_api.app.v1.routing.endpoints.sleep
 router = APIRouter(prefix="/v1", tags=["Street Side Version 1 API"])
 
 router.add_api_route(
+    "/get_excel_file_by_document_hash_id/{document_hash_id}",
+    endpoint=street_side_api.app.v1.routing.endpoints.data.get_excel_file_by_document_hash_id,
+    methods=["GET"],
+    description="Get excel file stored for document",
+)
+
+
+router.add_api_route(
     "/download_file/{document_hash_id}",
     endpoint=street_side_api.app.v1.routing.endpoints.data.download_file_by_document_hash_id,
     methods=["GET"],

@@ -3,12 +3,13 @@ from logging import getLogger
 from typing import List, Tuple
 
 from street_side.v1.data_models.configuration import StreetSideConfiguration
+from street_side.v1.data_models.excel import ExcelFile
+from street_side.v1.data_models.response import (
+    CompanyGetRequestResponse,
+    DocumentGetRequestResponse,
+    DocumentTypeGetRequestResponse,
+)
 from street_side.v1.storage.document_storage import DocumentStorage
-
-import street_side_api.app.v1.methods.data
-from street_side_api.app.v1.data.company import CompanyGetRequestResponse
-from street_side_api.app.v1.data.document_types import DocumentTypeGetRequestResponse
-from street_side_api.app.v1.data.documents import DocumentGetRequestResponse
 
 logger = getLogger(__name__)
 
@@ -18,8 +19,15 @@ DOCUMENT_STORAGE = DocumentStorage(
     postgres_dsn=APPLICATION_CONFIGURATION.postgres_dsn
 )
 
+async def get_excel_file_by_document_hash_id(document_hash_id: str) -> ExcelFile:
+    return await DOCUMENT_STORAGE.get_excel_file_by_document_hash_id(
+        document_hash_id=document_hash_id
+    )
+
 async def get_file_path_and_name_by_document_hash_id(document_hash_id: str) -> Tuple[str, str]:
-    return await DOCUMENT_STORAGE.get_file_path_and_name_by_document_hash_id(document_hash_id=document_hash_id)
+    return await DOCUMENT_STORAGE.get_file_path_and_name_by_document_hash_id(
+        document_hash_id=document_hash_id
+    )
 
 async def get_file_as_base64_by_document_hash_id(document_hash_id: str) -> str:
     document_as_base64 = await DOCUMENT_STORAGE.get_file_as_base64_by_document_hash_id(

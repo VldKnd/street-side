@@ -3,13 +3,27 @@ from typing import List
 
 from fastapi import HTTPException, status
 from fastapi.responses import FileResponse
+from street_side.v1.data_models.excel import ExcelFile
+from street_side.v1.data_models.response import (
+    CompanyGetRequestResponse,
+    DocumentGetRequestResponse,
+    DocumentTypeGetRequestResponse,
+)
 
 import street_side_api.app.v1.methods.data
-from street_side_api.app.v1.data.company import CompanyGetRequestResponse
-from street_side_api.app.v1.data.document_types import DocumentTypeGetRequestResponse
-from street_side_api.app.v1.data.documents import DocumentGetRequestResponse
 
 logger = getLogger(__name__)
+
+async def get_excel_file_by_document_hash_id(document_hash_id: str) -> ExcelFile:
+    try:
+        response = await street_side_api.app.v1.methods.data.get_excel_file_by_document_hash_id(
+            document_hash_id=document_hash_id,
+        )
+    except Exception as e:
+        logger.exception(f"Error getting file from database", exc_info=True)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    else:
+        return response
 
 async def download_file_by_document_hash_id(document_hash_id: str) -> FileResponse:
     try:
