@@ -17,16 +17,13 @@ export default function RawDocumentsPage() {
   return (
     <div className='w-10/12'>
       <div className='relative h-full w-full'>
-        <div className='mb-3 ml-3 text-foreground-white text-base'>
-          {"Select a clearing company"}
-        </div>
         <DropDownCompanies
           selectedCompany={selectedCompany}
           setSelectedCompany={setSelectedCompany}
           setSelectedDocumentType={setSelectedDocumentType}
           setSelectedDocument={setSelectedDocument}
         />
-        <div className="flex z-9 flex-row mt-3 h-full z-9">
+        <div className="flex z-9 flex-row mt-5 h-full z-9">
           <div className="w-1/3 z-10">
             {
               !isCompanyInterface(selectedCompany) &&

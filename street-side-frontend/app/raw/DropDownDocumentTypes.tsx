@@ -45,7 +45,7 @@ export function DropDownDocumentTypes({
       {({ open }) => (
         <>
         <Listbox.Button className={`relative ${stackOrder} w-full h-full text-left text-sm  inline-block bg-company-grey ${open ? "rounded-t-2xl" : "rounded-2xl"} text-foreground-white pl-5 pt-3 pb-2`}>
-            { selectedDocumentType ? selectedDocumentType.short_name : "Click to select" }
+            { selectedDocumentType ? selectedDocumentType.short_name : "Click to select a document" }
         </Listbox.Button>
         <Listbox.Options className={`absolute ${stackOrder} border-solid border w-1/3 border-opacity-25 border-foreground-white overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
         {documentTypes.map((document_type: DocumentTypeInterface) => (

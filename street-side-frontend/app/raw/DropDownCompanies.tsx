@@ -44,7 +44,7 @@ export function DropDownCompanies({
     {({ open }) => (
         <>
         <Listbox.Button className={`relative ${open ? "rounded-t-2xl" : "rounded-2xl"} ${stackOrder} w-full h-full text-left text-sm inline-block w-full bg-company-grey text-foreground-white pl-5 pt-3 pb-2`}>
-            { selectedCompany ? selectedCompany.full_name : "Click to select" }
+            { selectedCompany ? selectedCompany.full_name : "Click to select a clearing company" }
         </Listbox.Button>
         <Listbox.Options className={`absolute border-solid border border-opacity-25 border-foreground-white ${stackOrder} w-full overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
         {companies.map((company: CompanyInterface) => (
