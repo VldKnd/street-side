@@ -11,6 +11,7 @@ from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.configuration import StreetSideConfiguration
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
+from street_side.v1.data_models.excel import ExcelFile
 
 from street_side.v1.repositories.company import CompanyRepository
 from street_side.v1.repositories.document import DocumentRepository
@@ -23,8 +24,21 @@ class DocumentStorage(pydantic.BaseModel):
     path_to_document_storage: str = STREET_SIDE_CONFIGURATION.datastore_path
     postgres_dsn: str = STREET_SIDE_CONFIGURATION.postgres_dsn
 
+    async def get_excel_file_by_document_hash_id(self, document_hash_id: str) -> ExcelFile:
+        document = await self.get_document_by_hash_id(document_hash_id=document_hash_id)
+        path_to_file = self.get_path_to_file_from_document(document)
+        
+        if not os.path.exists(path_to_file):
+            raise RuntimeError(
+                f"Document {path_to_file} is not present on disk and can not be loaded.",
+                "It is likely not present on the disk."
+            )
+        
+        return ExcelFile.get_excel_file_from_local_disk(path_to_file=path_to_file)
+
     async def get_file_path_and_name_by_document_hash_id(self, document_hash_id: str) -> Tuple[str, str]:
         connection = await asyncpg.connect(self.postgres_dsn)
+
         document = await self.get_document_by_hash_id(
             document_hash_id=document_hash_id,
             connection=connection
@@ -37,6 +51,8 @@ class DocumentStorage(pydantic.BaseModel):
             company_hash_id=document_type.company_hash_id,
             connection=connection
         )
+
+        await connection.close()
     
         file_path = f"{self.path_to_document_storage}/{document.get_file_name_with_extension()}"
 
@@ -47,6 +63,7 @@ class DocumentStorage(pydantic.BaseModel):
             f"{document_pretty_name}"
             f"{document.extension}"
         )
+
         return file_path, file_name
 
     async def get_file_as_base64_by_document_hash_id(self, document_hash_id: str) -> str:
@@ -63,7 +80,7 @@ class DocumentStorage(pydantic.BaseModel):
             _connection = await asyncpg.connect(self.postgres_dsn)
             company_repository = CompanyRepository(connection=_connection)
             companies = await company_repository.fetch([company_hash_id])
-            _connection.close()
+            await _connection.close()
         else:
             company_repository = CompanyRepository(connection=connection)
             companies = await company_repository.fetch([company_hash_id])
@@ -86,7 +103,7 @@ class DocumentStorage(pydantic.BaseModel):
             _connection = await asyncpg.connect(self.postgres_dsn)
             document_type_repository = DocumentTypeRepository(connection=_connection)
             document_types = await document_type_repository.fetch([document_type_hash_id])
-            _connection.close()
+            await _connection.close()
         else:
             document_type_repository = DocumentTypeRepository(connection=connection)
             document_types = await document_type_repository.fetch([document_type_hash_id])
@@ -109,7 +126,7 @@ class DocumentStorage(pydantic.BaseModel):
             _connection = await asyncpg.connect(self.postgres_dsn)
             document_repository = DocumentRepository(connection=_connection)
             documents = await document_repository.fetch([document_hash_id])
-            _connection.close()
+            await _connection.close()
         else:
             document_repository = DocumentRepository(connection=connection)
             documents = await document_repository.fetch([document_hash_id])
@@ -185,29 +202,32 @@ class DocumentStorage(pydantic.BaseModel):
             ) for row in response_rows
         ]
     
-    def file_as_base64_from_local_disk(self, document: Document) -> str :
-        document_path = f"{self.path_to_document_storage}/{document.get_file_name_with_extension()}"
+    def get_path_to_file_from_document(self, document: Document) -> str:
+        return f"{self.path_to_document_storage}/{document.get_file_name_with_extension()}"
+    
+    def file_as_base64_from_local_disk(self, document: Document) -> str:
+        path_to_file = self.get_path_to_file_from_document(document)
 
-        if not os.path.exists(document_path):
+        if not os.path.exists(path_to_file):
             raise RuntimeError(
-                f"Document {document_path} is not present on disk and can not be loaded.",
+                f"Document {path_to_file} is not present on disk and can not be loaded.",
                 "It is likely not present on the disk."
             )
         
-        document_on_local_disk = open(document_path, mode='rb')
-        file_as_bytes = document_on_local_disk.read()
-        document_on_local_disk.close()
+        file_on_local_disk = open(path_to_file, mode='rb')
+        file_as_bytes = file_on_local_disk.read()
+        file_on_local_disk.close()
         file_as_base64 = (base64.b64encode(file_as_bytes)).decode('ascii')
 
         return file_as_base64
     
     def download_document_to_local_disk(self, document: Document):
-        document_path = f"{self.path_to_document_storage}/{document.get_file_name_with_extension()}"
-        if os.path.exists(document_path): return
+        path_to_file = self.get_path_to_file_from_document(document)
+        if os.path.exists(path_to_file): return
         response = requests.get(document.remote_url)
-        document_on_local_disk = open(document_path, mode='wb+')
-        document_on_local_disk.write(response.content)
-        document_on_local_disk.close()
+        file_on_local_disk = open(path_to_file, mode='wb+')
+        file_on_local_disk.write(response.content)
+        file_on_local_disk.close()
 
     async def postgres_insert_scrapping_result(self, companies: Dict[str, Company], document_types: Dict[str, DocumentType], documents: Dict[str, Document]):
         [
