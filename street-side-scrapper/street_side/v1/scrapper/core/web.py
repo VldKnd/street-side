@@ -9,7 +9,7 @@ from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.web import WebPage
 from street_side.v1.storage.document_storage import DocumentStorage
 
-from street_side.v1.scrapper.websites.ecc import find_and_filter_links
+import street_side.v1.scrapper.websites.ecc
 
 logger = getLogger(__name__)
 
@@ -19,7 +19,7 @@ COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[
         [WebPage],
         Tuple[Company, Dict[str, DocumentType], Dict[str, Document]]]
     ] = {
-    "ecc": find_and_filter_links,
+    "ecc": street_side.v1.scrapper.websites.ecc.find_and_filter_links,
 }
 
 def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
@@ -33,7 +33,7 @@ def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
         return
     
     company, scrapped_document_types, scrapped_documents = scrapper_function(webpage)
-    
+
     storage.insert_and_download_scrapping_result(
         company=company,
         document_types=scrapped_document_types,\

@@ -34,7 +34,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
     scrapped_company = Company(
         short_name="ECC",
         full_name="European Commodity Clearing",
-        home_url="https://www.ecc.de/en/"
+        home_url="https://www.ecc.de/en/",
+        created_at=None
     )
     scrapped_document_types: Dict[str, DocumentType] = {}
     scrapped_documents: Dict[str, Document] = {}
@@ -67,7 +68,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
                 full_name="Principles for financial market infrastructures",
                 short_name="PFMI",
                 is_quaterly=False,
-                is_yearly=True
+                is_yearly=True,
+                created_at=None,
             )
             scrapped_document = Document(
                     document_type_id=scrapped_document_type.hash_id,
@@ -76,6 +78,7 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
                     year=date.strftime("%Y"),
                     remote_url=document_url,
                     extension=extension,
+                    created_at=None,
             )
 
             scrapped_document_types[scrapped_document_type.hash_id] = scrapped_document_type
@@ -97,7 +100,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
                 full_name="International Organization of Securities Commissions",
                 short_name="IOSCO",
                 is_quaterly=True,
-                is_yearly=True
+                is_yearly=True,
+                created_at=None,
             )
             scrapped_document = Document(
                     document_type_id=scrapped_document_type.hash_id,
@@ -106,10 +110,41 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
                     year=year,
                     remote_url=document_url,
                     extension=extension,
+                    created_at=None,
                 )
 
             scrapped_document_types[scrapped_document_type.hash_id] = scrapped_document_type
             scrapped_documents[scrapped_document.hash_id] = scrapped_document
+        elif (
+            "financial statement" in lowercase_title
+        ):
+            a_element = table_row.find("a")
+            document_url = urljoin(url, a_element['href'])
+            _, extension = os.path.splitext(document_url)
+            date = datetime.strptime(data_entry['publishing_date'], "%Y-%m-%d")
+            year = lowercase_title[20:24]
+
+            scrapped_document_type = DocumentType(
+                company_hash_id=scrapped_company.hash_id,
+                full_name="Financial Statement",
+                short_name="Financial Statement",
+                is_quaterly=False,
+                is_yearly=True,
+                created_at=None,
+            )
+
+            scrapped_document = Document(
+                    document_type_id=scrapped_document_type.hash_id,
+                    date_published=date,
+                    year=year,
+                    remote_url=document_url,
+                    extension=extension,
+                    created_at=None,
+                )
+
+            scrapped_document_types[scrapped_document_type.hash_id] = scrapped_document_type
+            scrapped_documents[scrapped_document.hash_id] = scrapped_document
+            
         else:
             continue
     
