@@ -15,7 +15,7 @@ export default function RawDocumentsPage() {
   const [selectedDocument, setSelectedDocument] = useState<DocumentInterface | null>(null);
 
   return (
-    <div className='w-4/6'>
+    <div className='w-10/12'>
       <div className='relative h-full w-full'>
         <div className='mb-3 ml-3 text-foreground-white text-base'>
           {"Select a clearing company"}

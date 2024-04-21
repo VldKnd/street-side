@@ -48,7 +48,7 @@ export function DropDownDocumentTypes({
             { selectedDocumentType ? selectedDocumentType.short_name : "Click to select" }
         </Listbox.Button>
         <Listbox.Options className={`absolute ${stackOrder} border-solid border w-1/3 border-opacity-25 border-foreground-white overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
-        {documentTypes.map((document_type: CompanyInterface) => (
+        {documentTypes.map((document_type: DocumentTypeInterface) => (
             <Listbox.Option
             className={`relative ${stackOrder} overflow-hidden truncate pt-3 pb-2 pl-5 cursor-default select-none hover:opacity-75`}
             key={document_type.hash_id}
