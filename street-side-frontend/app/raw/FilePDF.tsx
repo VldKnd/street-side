@@ -55,6 +55,7 @@ export function FilePDF({
                     Array.from({ length: numPages }, (_, index) => index + 1).map(
                     (pageNumber) => {
                     return <Page
+                        key={pageNumber}
                         renderAnnotationLayer={false}
                         renderTextLayer={true}
                         pageNumber={pageNumber}

@@ -10,10 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'company-grey': '#31333F',
-        'title-red': '#D85454',
+        'company-grey': '#41434A',
+        'title-red': '#C3423F',
         'background-black': '#1E1E1E',
-        'foreground-white': '#B3B8BC',
+        'foreground-white': '#E0E0E0',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

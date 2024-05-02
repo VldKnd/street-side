@@ -4,6 +4,7 @@ import { Transition } from "@headlessui/react";
 
 export default function InLineListOfCompanies() {
     const { companies, isLoading, isError } = useAllCompanies();
+
     return (
     <Transition show={!isLoading && !isError}
         enter="transition-opacity duration-500"

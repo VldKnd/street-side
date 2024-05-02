@@ -12,17 +12,17 @@ export default function Home() {
       </div>
       <div className='mb-3 ml-3'>
         <p className='font-bold text-company-grey text-foreground-white'>
-          {`Why does this app exists ?`}
+          {`Why does this app exist?`}
         </p>
       </div>
       <div>
         <p className="text-foreground-white text-sm indent-8">
-          Each clearing center distributes public, quarterly reports on its financial health, which must comply with the reporting rules recommended by the Bank of International Settlements. In practice, the reports are issued at different times, in different formats and are not centralized for quick analysis. This variety of documents increases the time required to analyze them.
+        Each clearing center issues public quarterly reports on its financial status, adhering to reporting standards recommended by the Bank for International Settlements. However, these reports are dispersed across different times and formats, lacking centralization for efficient analysis. This diversity complicates the analysis process and prolongs the time required for thorough examination.
         </p>
       </div>
       <div>
         <p className="text-foreground-white text-sm indent-8 mt-3">
-          This process can be simply automated.  In addition, clearing reports do not send email or other notifications. There are errors in reports that can be automatically caught. In general, such documents are inconvenient to work with. With the help of automatic collection of data from multiple clearing centers and cross-analysis of their state on the basis of specified risk management parameters - it is possible to improve the quality of risk management and dialog between venues and their clients.
+        Automating this process is straightforward and beneficial. Current clearing reports lack mechanisms for email notifications, leaving potential errors unchecked. Consequently, working with such documents proves inconvenient. By implementing automated data collection from various clearing centers and conducting cross-analysis based on predefined risk management parameters, we can significantly enhance risk management quality and foster improved communication between venues and their clientele.
         </p>
       </div>
       <InLineListOfCompanies/>
