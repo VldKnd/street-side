@@ -35,7 +35,7 @@ services:
       - ../datastore/storage:/opt/street-side/datastore/storage
       - ../street-side-api/street_side_api:/opt/street-side/street-side-api/street_side_api
     environment:
-      - STREET_SIDE_CONFIGURATION_PATH=/opt/street-side/configuration/docker_only_ecc.json
+      - STREET_SIDE_CONFIGURATION_PATH=/opt/street-side/configuration/docker_prod.json
       - HOST=0.0.0.0
       - PORT=8080
       - RELOAD=true

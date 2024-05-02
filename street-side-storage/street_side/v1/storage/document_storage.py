@@ -224,7 +224,13 @@ class DocumentStorage(pydantic.BaseModel):
     def download_document_to_local_disk(self, document: Document):
         path_to_file = self.get_path_to_file_from_document(document)
         if os.path.exists(path_to_file): return
-        response = requests.get(document.remote_url)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
+        }
+        response = requests.get(
+            url=document.remote_url,
+            headers=headers
+        )
         file_on_local_disk = open(path_to_file, mode='wb+')
         file_on_local_disk.write(response.content)
         file_on_local_disk.close()
@@ -257,31 +263,31 @@ class DocumentStorage(pydantic.BaseModel):
         )
 
     def insert_and_download_scrapping_result(self, company: Company, document_types: Dict[str, DocumentType], documents: Dict[str, Document]):
+        downloaded_documents: Dict[str, Document] = {}
         for hash_id, document in documents.items():
             try:
                 self.download_document_to_local_disk(document=document)
+                downloaded_documents[document.hash_id] = document
             except Exception as e:
-                documents.pop(hash_id, None)
                 LOGGER.error(
                     f"Failed to download document {document}. It will not be inserted. {e}"
                 )
 
-        if len(documents) < 1:
+        if len(downloaded_documents) < 1:
             return
 
         kept_document_types_hash_ids = {
-            document.document_type_id for
-            document in documents.values()
+            downloaded_document.document_type_id for
+            downloaded_document in downloaded_documents.values()
         }
-
-        for document_type_hash_id in document_types.keys():
-            if document_type_hash_id not in kept_document_types_hash_ids:
-                document_types.pop(document_type_hash_id, None)
 
         asyncio.run(
             self.postgres_insert_scrapping_result(
                 companies={company.hash_id:company},
-                document_types=document_types,
+                document_types={
+                    document_type_hash_id:document_types[document_type_hash_id]
+                    for document_type_hash_id in kept_document_types_hash_ids
+                },
                 documents=documents,
             )
         )

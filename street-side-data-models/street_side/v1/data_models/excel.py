@@ -25,7 +25,7 @@ class ExcelFile(pydantic.BaseModel):
         for sheet_name in sheet_names:
             excel_sheet_as_dataframe = excel_file.parse(sheet_name)
             if excel_sheet_as_dataframe.empty: continue
-            excel_sheet_as_dict = excel_sheet_as_dataframe.astype(str).to_dict()
+            excel_sheet_as_dict = excel_sheet_as_dataframe.fillna('').astype(str).to_dict()
             headers = list(excel_sheet_as_dict.keys())
             indexes = excel_sheet_as_dict[headers[-1]].keys()
             rows = {
