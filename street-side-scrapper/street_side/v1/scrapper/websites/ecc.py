@@ -98,7 +98,7 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
             scrapped_document_type = DocumentType(
                 company_hash_id=scrapped_company.hash_id,
                 full_name="International Organization of Securities Commissions",
-                short_name="IOSCO",
+                short_name="CPMI-IOSCO",
                 is_quaterly=True,
                 is_yearly=True,
                 created_at=None,

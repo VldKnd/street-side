@@ -15,6 +15,8 @@ pydantic = "^2.4.0"
 street-side-data-models = { path = "../street-side-data-models", develop = true}
 street-side-storage = { path = "../street-side-storage", develop = true}
 beautifulsoup4 = "^4.12.3"
+selenium = "^4.20.0"
+selenium-stealth = "^1.0.6"
 
 [build-system]
 requires = ["poetry-core"]

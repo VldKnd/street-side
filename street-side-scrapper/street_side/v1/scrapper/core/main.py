@@ -1,4 +1,3 @@
-import asyncio
 from logging import getLogger
 
 from street_side.v1.data_models.configuration import StreetSideConfiguration

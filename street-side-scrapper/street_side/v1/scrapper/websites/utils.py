@@ -1,6 +1,8 @@
 
 from typing import Callable, Dict, List, NewType, Tuple
 
+import requests
+from bs4 import BeautifulSoup
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
