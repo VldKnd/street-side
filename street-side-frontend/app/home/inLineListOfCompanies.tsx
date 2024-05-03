@@ -19,7 +19,7 @@ export default function InLineListOfCompanies() {
         {`Data is collected from`}
       </p>
     </div>
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap justify-center content-center">
         {
             companies.map(
                 (company : CompanyInterface) => {
