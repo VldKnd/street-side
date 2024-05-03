@@ -4,11 +4,8 @@ from datetime import datetime
 from logging import getLogger
 from typing import Dict, Tuple
 
-import bs4
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
@@ -52,6 +49,7 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         Dict[str, DocumentType],
         Dict[str, Document]
     ]:
+    url = web_page.url
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("--headless")
@@ -69,7 +67,7 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         fix_hairline=True,
     )
 
-    driver.get('https://www.lme.com/en/market-data/reports-and-data/lme-clear-reports/cpmi-iosco-disclosure')
+    driver.get(url)
     content = driver.page_source
     driver.quit()
     home_url = "https://www.lme.com"

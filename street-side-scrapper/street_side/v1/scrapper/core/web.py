@@ -15,7 +15,9 @@ import street_side.v1.scrapper.websites.ccpa
 import street_side.v1.scrapper.websites.cme_group
 import street_side.v1.scrapper.websites.ecc
 import street_side.v1.scrapper.websites.eurex
-import street_side.v1.scrapper.websites.ice
+import street_side.v1.scrapper.websites.ice_credit
+import street_side.v1.scrapper.websites.ice_eu
+import street_side.v1.scrapper.websites.ice_us
 import street_side.v1.scrapper.websites.kdpw
 import street_side.v1.scrapper.websites.lch_ltd
 import street_side.v1.scrapper.websites.lch_sa
@@ -41,7 +43,9 @@ COMPANY_NAME_TO_SCRAPPER_FUNCTION: Dict[
     "ccpa": street_side.v1.scrapper.websites.ccpa.find_and_filter_links,
     "lme": street_side.v1.scrapper.websites.lme.find_and_filter_links,
     "bme": street_side.v1.scrapper.websites.bme.find_and_filter_links,
-    "ice": street_side.v1.scrapper.websites.ice.find_and_filter_links
+    "ice(us)": street_side.v1.scrapper.websites.ice_us.find_and_filter_links,
+    "ice(eu)": street_side.v1.scrapper.websites.ice_eu.find_and_filter_links,
+    "ice(credit)": street_side.v1.scrapper.websites.ice_credit.find_and_filter_links
 }
 
 def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
@@ -55,11 +59,12 @@ def scrape_and_download_data(webpage: WebPage, storage: DocumentStorage):
         return
     
     try:
+        logger.warning(f"Starting to scrape {webpage}!")
         company, scrapped_document_types, scrapped_documents = scrapper_function(webpage)
     except Exception:
         logger.error(f"\nScrapping of {webpage} failed.", exc_info=True)
     else:
-        logger.warning(f"Website {webpage} scrapped, downloading data")
+        logger.warning(f"Website {webpage} scrapped, downloading data.")
         
         storage.insert_and_download_scrapping_result(
             company=company,
