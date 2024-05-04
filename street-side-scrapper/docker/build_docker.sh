@@ -1,0 +1,1 @@
+docker build . -f street-side/street-side-scrapper/docker/Dockerfile --target development --build-arg STREET_SIDE_CONFIGURATION_PATH=/opt/street-side/configuration/docker_prod.json --tag street-side-scrapper

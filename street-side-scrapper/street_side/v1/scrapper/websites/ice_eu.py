@@ -15,6 +15,8 @@ from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.web import WebPage
 
+from street_side.v1.scrapper.websites.utils import set_chrome_options
+
 logger = getLogger(__name__)
 
 def iosco_filter(table_row) -> bool:
@@ -31,12 +33,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
     ]:
     home_url = "https://www.ice.com"
     url = web_page.url
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("start-maximized")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
-    driver = webdriver.Chrome(options=options)
+    chrome_options = set_chrome_options()
+    driver = webdriver.Chrome(options=chrome_options)
 
     stealth(
         driver,

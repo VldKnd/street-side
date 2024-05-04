@@ -4,7 +4,6 @@ from datetime import datetime
 from logging import getLogger
 from typing import Dict, Tuple
 
-import bs4
 import requests
 from bs4 import BeautifulSoup
 from street_side.v1.data_models.company import Company
