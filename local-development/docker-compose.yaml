@@ -65,3 +65,6 @@ services:
       - ../street-side-frontend/.next:/opt/street-side/street-side-frontend/.next
       - ../street-side-frontend/app:/opt/street-side/street-side-frontend/app
       - ../street-side-frontend/api:/opt/street-side/street-side-frontend/api
+    environment:
+      - API_HOST=127.0.0.1
+      - API_PORT=8080
