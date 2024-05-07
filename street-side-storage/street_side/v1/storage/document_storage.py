@@ -8,7 +8,6 @@ import asyncpg
 import pydantic
 import requests
 from street_side.v1.data_models.company import Company
-from street_side.v1.data_models.configuration import StreetSideConfiguration
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.excel import ExcelFile
@@ -17,12 +16,11 @@ from street_side.v1.repositories.company import CompanyRepository
 from street_side.v1.repositories.document import DocumentRepository
 from street_side.v1.repositories.document_type import DocumentTypeRepository
 
-STREET_SIDE_CONFIGURATION = StreetSideConfiguration.from_env_json_file()
 LOGGER = logging.getLogger(__name__)
 
 class DocumentStorage(pydantic.BaseModel):
-    path_to_document_storage: str = STREET_SIDE_CONFIGURATION.datastore_path
-    postgres_dsn: str = STREET_SIDE_CONFIGURATION.postgres_dsn
+    path_to_document_storage: str
+    postgres_dsn: str
 
     async def get_excel_file_by_document_hash_id(self, document_hash_id: str) -> ExcelFile:
         document = await self.get_document_by_hash_id(document_hash_id=document_hash_id)
