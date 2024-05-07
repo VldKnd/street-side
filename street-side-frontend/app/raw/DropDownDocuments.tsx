@@ -35,6 +35,11 @@ export function DropDownDocuments({
     setSelectedDocument(value);
   }
 
+  var sortedDocuments = [...documents];
+  sortedDocuments.sort(
+    (lhs, rhs) => lhs.pretty_date.localeCompare(rhs.pretty_date)
+  )
+
   return (
     <Listbox value={selectedDocument} onChange={onListBoxChange} >
       {({ open }) => (
@@ -43,7 +48,7 @@ export function DropDownDocuments({
             { selectedDocument ? selectedDocument.pretty_date : "Click to select a date" }
         </Listbox.Button>
         <Listbox.Options className={`absolute ${stackOrder} border-solid border w-1/4  max-h-60 border-opacity-25 border-foreground-white overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
-        {documents.map((document: DocumentInterface) => (
+        {sortedDocuments.map((document: DocumentInterface) => (
             <Listbox.Option
             className={`relative ${stackOrder} overflow-hidden truncate pt-3 pb-2 pl-5 cursor-default select-none hover:opacity-75`}
             key={document.hash_id}
