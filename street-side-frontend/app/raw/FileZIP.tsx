@@ -15,7 +15,7 @@ export function FileZIP({ stackOrder
                 Selected document is a .zip archive and can not be pre-viewed.
             </p>
             <p>
-                You can still download it on your local disk by clicking the 'Download data' button!
+                You can still download it on your local disk by clicking the &apos;Download data&apos; button!
             </p>
         </div>
     )

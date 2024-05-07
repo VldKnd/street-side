@@ -80,7 +80,7 @@ function createTableHeadFromExcelSheet( excelSheet : ExcelSheetInterface ) {
 }
 
 function createTableFromExcelSheet( excelSheet : ExcelSheetInterface | undefined) {
-    if ( typeof excelSheet === undefined ) return;
+    if ( excelSheet === undefined ) return;
 
     return (
     <div className="overflow-scroll flex bg-company-grey max-h-screen w-full border border-collapse border-company-grey">
@@ -110,7 +110,7 @@ export function FileExcel({
             <div className="overflow-x-auto flex rounded-t-2xl" >
             {
                 !isExcelFileInterface(excelFile) &&
-                Array.from(excelFile.keys()).map(
+                Array.from(excelFile!.keys()).map(
                     (value: string, index) => {
                         return (
                             <button
@@ -128,7 +128,7 @@ export function FileExcel({
             {
                 selectedExcelSheet != '' &&
                 !isExcelFileInterface(excelFile) &&
-                createTableFromExcelSheet(excelFile.get(selectedExcelSheet))
+                createTableFromExcelSheet(excelFile!.get(selectedExcelSheet))
             }
         </div>
     )

@@ -17,18 +17,20 @@ export default function RawDocumentsPage() {
   return (
     <div className='w-10/12'>
       <div className='relative h-full w-full'>
-        <DropDownCompanies
-          selectedCompany={selectedCompany}
-          setSelectedCompany={setSelectedCompany}
-          setSelectedDocumentType={setSelectedDocumentType}
-          setSelectedDocument={setSelectedDocument}
-        />
+        {
+          <DropDownCompanies
+            selectedCompany={selectedCompany}
+            setSelectedCompany={setSelectedCompany}
+            setSelectedDocumentType={setSelectedDocumentType}
+            setSelectedDocument={setSelectedDocument}
+          />
+        }
         <div className="flex z-9 flex-row mt-5 h-full z-9">
           <div className="w-1/3 z-10">
             {
               !isCompanyInterface(selectedCompany) &&
               <DropDownDocumentTypes
-                selectedCompany={selectedCompany}
+                selectedCompany={selectedCompany!}
                 selectedDocumentType={selectedDocumentType}
                 setSelectedDocumentType={setSelectedDocumentType}
                 setSelectedDocument={setSelectedDocument}
@@ -40,8 +42,8 @@ export default function RawDocumentsPage() {
               !isCompanyInterface(selectedCompany) &&
               !isDocumentTypeInterface(selectedDocumentType) &&
               <DropDownDocuments
-                selectedCompany={selectedCompany}
-                selectedDocumentType={selectedDocumentType}
+                selectedCompany={selectedCompany!}
+                selectedDocumentType={selectedDocumentType!}
                 selectedDocument={selectedDocument}
                 setSelectedDocument={setSelectedDocument}
               />
@@ -52,7 +54,7 @@ export default function RawDocumentsPage() {
               !isCompanyInterface(selectedCompany) &&
               !isDocumentTypeInterface(selectedDocumentType) &&
               !isDocumentInterface(selectedDocument) &&
-              <DownloadFileButton selectedDocument={selectedDocument} />
+              <DownloadFileButton selectedDocument={selectedDocument!} />
             }
           </div>
         </div>
@@ -61,7 +63,7 @@ export default function RawDocumentsPage() {
             !isCompanyInterface(selectedCompany) &&
             !isDocumentTypeInterface(selectedDocumentType) &&
             !isDocumentInterface(selectedDocument) &&
-            <File selectedDocument={selectedDocument} />
+            <File selectedDocument={selectedDocument!} />
           }
         </div>
       </div>

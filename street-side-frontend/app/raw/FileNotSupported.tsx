@@ -7,7 +7,7 @@ export function FileNotSupported({ extention, stackOrder
                 Selected document have {extention} format and can not be pre-viewed at the moment.
             </p>
             <p>
-                You can still download it on your local disk by clicking the 'Download data' button!
+                You can still download it on your local disk by clicking the &apos;Download data&apos; button!
             </p>
         </div>
     )
