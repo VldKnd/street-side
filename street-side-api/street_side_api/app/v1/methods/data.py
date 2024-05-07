@@ -1,8 +1,9 @@
 
 from logging import getLogger
 from typing import List, Tuple
+from xmlrpc.client import APPLICATION_ERROR
 
-from street_side.v1.data_models.configuration import StreetSideConfiguration
+from street_side.v1.data_models.configuration import SharedSettings
 from street_side.v1.data_models.excel import ExcelFile
 from street_side.v1.data_models.response import (
     CompanyGetRequestResponse,
@@ -13,10 +14,10 @@ from street_side.v1.storage.document_storage import DocumentStorage
 
 logger = getLogger(__name__)
 
-APPLICATION_CONFIGURATION = StreetSideConfiguration.from_env_json_file()
+APPLICATION_SETTINGS = SharedSettings()
 DOCUMENT_STORAGE = DocumentStorage(
-    path_to_document_storage=APPLICATION_CONFIGURATION.datastore_path,
-    postgres_dsn=APPLICATION_CONFIGURATION.postgres_dsn
+    path_to_document_storage=APPLICATION_SETTINGS.STREET_SIDE_DATASTORE_PATH,
+    postgres_dsn=APPLICATION_SETTINGS.POSTGRES_DSN
 )
 
 async def get_excel_file_by_document_hash_id(document_hash_id: str) -> ExcelFile:
