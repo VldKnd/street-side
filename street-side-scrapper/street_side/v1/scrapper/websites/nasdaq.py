@@ -32,7 +32,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
     }
     response = requests.get(
         url=url,
-        headers=headers
+        headers=headers,
+        timeout=10
     )
     content = response.content
     soup = BeautifulSoup(content, 'html.parser')
