@@ -5,7 +5,7 @@ import pydantic
 
 
 class ExcelSheet(pydantic.BaseModel):
-    headers: List[Hashable]
+    headers: List[Hashable]  = pydantic.Field(exclude=True)
     rows: Dict[int, List[str]]
 
 
