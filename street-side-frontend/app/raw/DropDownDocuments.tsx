@@ -37,7 +37,7 @@ export function DropDownDocuments({
 
   var sortedDocuments = [...documents];
   sortedDocuments.sort(
-    (lhs, rhs) => lhs.pretty_date.localeCompare(rhs.pretty_date)
+    (lhs, rhs) => rhs.pretty_date.localeCompare(lhs.pretty_date)
   )
 
   return (
