@@ -106,3 +106,5 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         scrapped_documents[scrapped_document.hash_id] = scrapped_document
     
     return scrapped_company, scrapped_document_types, scrapped_documents
+
+

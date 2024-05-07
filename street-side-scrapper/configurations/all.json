@@ -1,0 +1,77 @@
+{
+    "scrapper_web_pages" : {
+        "ecc": {
+            "company_name": "ECC",
+            "full_name": "European Commodity Clearing",
+            "url": "https://www.ecc.de/en/downloads"
+        },
+        "nasdaq": {
+            "company_name": "Nasdaq",
+            "full_name": "Nasdaq's Central Counterparty Clearing House",
+            "url": "https://www.nasdaq.com/solutions/about-nasdaq-clearing"
+        },
+        "cboe": {
+            "company_name": "Cboe",
+            "full_name": "Chicago Board Options Exchange",
+            "url": "https://clear.cboe.com/europe/resources/documentation/public_disclosures/"
+        },
+        "lch(sa)": {
+            "company_name": "LCH(SA)",
+            "full_name": "London Clearing House",
+            "url": "https://www.lch.com/resources/ccp-disclosures"
+        },
+        "lch(ltd)": {
+            "company_name": "LCH(LTD)",
+            "full_name": "London Clearing House",
+            "url": "https://www.lch.com/resources/ccp-disclosures"
+        },
+        "eurex": {
+            "company_name": "Eurex",
+            "full_name": "Eurex",
+            "url": "https://www.eurex.com/ec-en/find/about-us/regulatory-standards"
+        },
+        "kdpw": {
+            "company_name": "KDPW",
+            "full_name": "Krajowy Depozyt Papierów Wartościowych (KDPW)",
+            "url": "https://www.kdpwccp.pl/en/cpmi-iosco-principles-for-financial-market-infrastructures.html"
+        },
+        "cme group": {
+            "company_name": "CME Group",
+            "full_name": "CME Group",
+            "url": "https://www.cmegroup.com/clearing/cpmi-iosco-reporting.html#cmeIOSCOReports"
+        },
+        "ccpa": {
+            "company_name": "CCPA",
+            "full_name": "Central Counterparty Austria",
+            "url": "https://www.ccpa.at/en/cpmi-iosco/"
+        },
+        "lme": {
+            "company_name": "LME",
+            "full_name": "LME Clearing",
+            "url": "https://www.lme.com/en/market-data/reports-and-data/lme-clear-reports/cpmi-iosco-disclosure"
+        },
+        "bme": {
+            "company_name": "BME",
+            "full_name": "BME Clearing",
+            "url": "https://www.bmeclearing.es/ing/Regulations/CPMI-IOSCO"
+        },
+        "ice(us)": {
+            "company_name": "ICE(US)",
+            "full_name": "ICE",
+            "url": "https://www.ice.com/clearing/quarterly-clearing-disclosures"
+        
+        },
+        "ice(eu)": {
+            "company_name": "ICE(EU)",
+            "full_name": "ICE",
+            "url": "https://www.ice.com/clearing/quarterly-clearing-disclosures"
+
+        },
+        "ice(credit)": {
+            "company_name": "ICE(Credit)",
+            "full_name": "ICE",
+            "url": "https://www.ice.com/clearing/quarterly-clearing-disclosures"
+
+        }
+    }
+}

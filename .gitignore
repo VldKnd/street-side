@@ -1,4 +1,5 @@
 ./datastore/*
+datastore
 .idea
 .cache
 .venv

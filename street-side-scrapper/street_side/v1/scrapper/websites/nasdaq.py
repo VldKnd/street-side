@@ -48,7 +48,6 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         link for link in links
         if link.string is not None and "Annual Report" in link.string
     ]
-    
 
     scrapped_company = Company(
         short_name="Nasdaq",
