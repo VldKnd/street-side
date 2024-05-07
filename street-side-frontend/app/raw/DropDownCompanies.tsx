@@ -31,6 +31,7 @@ export function DropDownCompanies({
     </div>
     )
   }
+
   const onListBoxChange = (value : CompanyInterface | null) => {
     if (value !== selectedCompany) {
         setSelectedCompany(value);
@@ -38,6 +39,11 @@ export function DropDownCompanies({
         setSelectedDocument(null);
       }
   }
+
+  var sortedCompanies = [...companies];
+  sortedCompanies.sort(
+    (lhs, rhs) => lhs.full_name.localeCompare(rhs.full_name)
+  )
 
   return (
     <Listbox value={selectedCompany} onChange={onListBoxChange} >
@@ -47,7 +53,7 @@ export function DropDownCompanies({
             { selectedCompany ? selectedCompany.full_name : "Click to select a clearing company" }
         </Listbox.Button>
         <Listbox.Options className={`absolute border-solid border border-opacity-25 border-foreground-white ${stackOrder} w-full overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
-        {companies.map((company: CompanyInterface) => (
+        {sortedCompanies.map((company: CompanyInterface) => (
             <Listbox.Option
             className={`relative ${stackOrder} pt-3 pb-2 pl-5 cursor-default select-none hover:opacity-75`}
             key={company.hash_id}

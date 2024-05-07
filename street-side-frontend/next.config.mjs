@@ -4,6 +4,9 @@ const nextConfig = {
         config.resolve.alias.canvas = false;
         return config;
     },
+    env: {
+      userName: process.env.userName,
+    },
 };
 
 export default nextConfig;

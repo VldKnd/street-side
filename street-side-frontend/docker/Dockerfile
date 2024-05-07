@@ -22,6 +22,7 @@ COPY ${APP_FOLDER}/postcss.config.js ./
 COPY ${APP_FOLDER}/README.md ./
 COPY ${APP_FOLDER}/tailwind.config.ts ./
 COPY ${APP_FOLDER}/tsconfig.json ./
+COPY ${APP_FOLDER}/.env.local ./
 
 RUN npm install;
 
@@ -32,7 +33,7 @@ ARG APP_NAME
 ARG APP_FOLDER
 
 WORKDIR ${TOP_FOLDER}/${APP_FOLDER}
-COPY ${APP_FOLDER}/docker/dev-entrypoint.sh docker/entrypoint.sh
+COPY ${APP_FOLDER}/docker/docker_entrypoint.sh docker/entrypoint.sh
 CMD "./docker/entrypoint.sh"
 
 # Dev image, copy all the files and run next
