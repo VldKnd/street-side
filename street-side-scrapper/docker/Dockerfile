@@ -50,10 +50,12 @@ RUN apt-get install -yqq unzip && \
     apt install -y curl
 
 # Download the Chrome Driver
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux64/chromedriver-linux64.zip
 
 # Unzip the Chrome Driver into /usr/local/bin directory
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+RUN unzip /tmp/chromedriver.zip -d /usr/local/bin/
+RUN mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+RUN rm -rf /usr/local/bin/chromedriver-linux64
 
 # Install poetry
 RUN apt update && \
