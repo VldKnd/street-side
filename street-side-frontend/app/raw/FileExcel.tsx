@@ -57,6 +57,8 @@ function createTableBodyFromExcelSheet( excelSheet : ExcelSheetInterface ) {
 }
 
 function createTableHeadFromExcelSheet( excelSheet : ExcelSheetInterface ) {
+    if (excelSheet.headers === undefined) return;
+    
     return (
         <thead>
             <tr>
@@ -81,19 +83,22 @@ function createTableHeadFromExcelSheet( excelSheet : ExcelSheetInterface ) {
 
 function createTableFromExcelSheet( excelSheet : ExcelSheetInterface | undefined) {
     if ( excelSheet === undefined ) return;
-
-    return (
-    <div className="overflow-scroll flex bg-company-grey max-h-screen w-full border border-collapse border-company-grey">
-        <table className="w-full">
-            {
-                createTableHeadFromExcelSheet(excelSheet)
-            }
-            {
-                createTableBodyFromExcelSheet(excelSheet)
-            }
-        </table>
-    </div>
-    )
+    else if ( typeof excelSheet === undefined ) return;
+    else {
+        console.log(excelSheet)
+        return (
+        <div className="overflow-scroll flex bg-company-grey max-h-screen w-full border border-collapse border-company-grey">
+            <table className="w-full">
+                {
+                    createTableHeadFromExcelSheet(excelSheet)
+                }
+                {
+                    createTableBodyFromExcelSheet(excelSheet)
+                }
+            </table>
+        </div>
+        );
+    }
 }
 export function FileExcel({
     selectedDocument, stackOrder
