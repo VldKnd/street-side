@@ -1,0 +1,12 @@
+{
+    "scrapper_web_pages" : {
+        "ecc": {
+            "company_name": "ECC",
+            "full_name": "European Commodity Clearing",
+            "url": "https://www.ecc.de/en/downloads"
+        }
+    },
+    "datastore_path" : "/opt/street-side/datastore/storage",
+    "postgres_dsn":"postgresql://postgres:postgres@postgres:5432/street-side?sslmode=disable",
+    "database_pool_size":5
+}
