@@ -1,15 +1,19 @@
 import os
 import re
+import time
 from datetime import datetime
 from logging import getLogger
 from typing import Dict, Tuple
 
-import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium_stealth import stealth
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
 from street_side.v1.data_models.web import WebPage
+
+from street_side.v1.scrapper.websites.utils import set_chrome_options
 
 logger = getLogger(__name__)
 
@@ -20,22 +24,23 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
     ]:
     home_url = "https://www.nasdaq.com"
     url = web_page.url
-    headers = {
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Host": "www.nasdaq.com",
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
-    }
-    response = requests.get(
-        url=url,
-        headers=headers,
-        timeout=10
+
+    chrome_options = set_chrome_options()
+    driver = webdriver.Chrome(options=chrome_options)
+
+    stealth(
+        driver,
+        languages=["en-US", "en"],
+        vendor="Google Inc.",
+        platform="Win32",
+        webgl_vendor="Intel Inc.",
+        renderer="Intel Iris OpenGL Engine",
+        fix_hairline=True,
     )
-    content = response.content
+
+    driver.get(url)
+    content = driver.page_source
+
     soup = BeautifulSoup(content, 'html.parser')
 
     links = soup.find_all("a")
@@ -54,7 +59,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         short_name="Nasdaq",
         full_name="Nasdaq's Central Counterparty Clearing House",
         home_url=home_url,
-        created_at=None
+        created_at=None,
+        updated_at=None,
     )
 
     scrapped_document_types: Dict[str, DocumentType] = {}

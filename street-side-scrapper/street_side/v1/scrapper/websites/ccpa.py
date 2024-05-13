@@ -76,7 +76,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         short_name="CCPA",
         full_name="Central Counterparty Austria",
         home_url=home_url,
-        created_at=None
+        created_at=None,
+        updated_at=None
     )
 
     scrapped_document_types: Dict[str, DocumentType] = {}

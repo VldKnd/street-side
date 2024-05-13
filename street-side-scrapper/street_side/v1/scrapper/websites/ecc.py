@@ -44,7 +44,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         short_name="ECC",
         full_name="European Commodity Clearing",
         home_url="https://www.ecc.de/en/",
-        created_at=None
+        created_at=None,
+        updated_at=None
     )
     scrapped_document_types: Dict[str, DocumentType] = {}
     scrapped_documents: Dict[str, Document] = {}

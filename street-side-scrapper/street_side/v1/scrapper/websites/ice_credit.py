@@ -74,7 +74,8 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         short_name="ICE Credit",
         full_name="Intercontinental Exchange Credit (ICE Credit)",
         home_url=home_url,
-        created_at=None
+        created_at=None,
+        updated_at=None
     )
     scrapped_document_types: Dict[str, DocumentType] = {}
     scrapped_documents: Dict[str, Document] = {}
