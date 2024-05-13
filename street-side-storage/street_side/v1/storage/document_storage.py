@@ -197,6 +197,7 @@ class DocumentStorage(pydantic.BaseModel):
                 full_name=row['full_name'],
                 home_url=row['home_url'],
                 created_at=row['created_at'],
+                updated_at=row['updated_at'],
             ) for row in response_rows
         ]
     
@@ -262,7 +263,7 @@ class DocumentStorage(pydantic.BaseModel):
 
     def insert_and_download_scrapping_result(self, company: Company, document_types: Dict[str, DocumentType], documents: Dict[str, Document]):
         downloaded_documents: Dict[str, Document] = {}
-        for hash_id, document in documents.items():
+        for _, document in documents.items():
             try:
                 self.download_document_to_local_disk(document=document)
                 downloaded_documents[document.hash_id] = document
@@ -289,4 +290,3 @@ class DocumentStorage(pydantic.BaseModel):
                 documents=documents,
             )
         )
-        

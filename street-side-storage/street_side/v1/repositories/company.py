@@ -65,7 +65,7 @@ class CompanyRepository():
                 FROM
                     unnest($1::"v1"."companies"[]) as record
             )
-            ON CONFLICT DO NOTHING
+            ON CONFLICT ("hash_id") DO UPDATE SET updated_at=now()
             """,
             tuples_to_insert,
         )
@@ -80,7 +80,8 @@ class CompanyRepository():
                 full_name,
                 home_url,
                 hash_id,
-                created_at
+                created_at,
+                updated_at
             FROM
                 "v1"."companies"
             WHERE
@@ -94,6 +95,7 @@ class CompanyRepository():
                 full_name=row["full_name"],
                 home_url=row["home_url"],
                 created_at=row["created_at"],
+                updated_at=row["updated_at"],
             ) for row in records
         }
    
@@ -105,7 +107,8 @@ class CompanyRepository():
                 full_name,
                 home_url,
                 hash_id,
-                created_at
+                created_at,
+                updated_at
             FROM
                 "v1"."companies"
             WHERE
@@ -119,5 +122,6 @@ class CompanyRepository():
                 full_name=row["full_name"],
                 home_url=row["home_url"],
                 created_at=row["created_at"],
+                updated_at=row["updated_at"],
             ) for row in records
         }
