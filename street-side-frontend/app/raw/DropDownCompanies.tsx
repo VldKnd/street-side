@@ -12,6 +12,11 @@ interface DropDownCompaniesInterface {
     setSelectedDocument : DocumentSetterInterace,
 }
 
+function getDateAsYMD(raw_date: string) {
+  const date = new Date(Date.parse(raw_date));
+  return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`;
+}
+
 export function DropDownCompanies({
     selectedCompany,
     setSelectedCompany,
@@ -49,24 +54,37 @@ export function DropDownCompanies({
     <Listbox value={selectedCompany} onChange={onListBoxChange} >
     {({ open }) => (
         <>
-        <Listbox.Button className={`relative ${open ? "rounded-t-2xl" : "rounded-2xl"} ${stackOrder} w-full h-full text-left text-sm inline-block w-full bg-company-grey text-foreground-white pl-5 pt-3 pb-2`}>
-            { selectedCompany ? selectedCompany.full_name : "Click to select a clearing company" }
+        <Listbox.Button className={`relative ${open ? "rounded-t-2xl" : "rounded-2xl"} ${stackOrder} w-full h-full text-left justify-between text-sm flex inline-block w-full bg-company-grey text-foreground-white pl-5 pt-3 pb-2 pr-5`}>
+            <p>
+              { selectedCompany ? selectedCompany.full_name : "Click to select a clearing company" }
+            </p>
+            { selectedCompany &&
+              (
+                <p className='opacity-25 justify-self-end text-sm'>
+                  updated on {getDateAsYMD(selectedCompany.updated_at)}
+                </p>
+              )
+            }
         </Listbox.Button>
         <Listbox.Options className={`absolute border-solid border border-opacity-25 border-foreground-white ${stackOrder} w-full overflow-auto rounded-b-2xl bg-company-grey text-sm text-foreground-white`}>
         {sortedCompanies.map((company: CompanyInterface) => (
             <Listbox.Option
-            className={`relative ${stackOrder} pt-3 pb-2 pl-5 cursor-default select-none hover:opacity-75`}
+            className={`relative ${stackOrder} pt-3 pb-2 pl-5 pr-5 justify-between cursor-default select-none hover:opacity-75 flex`}
             key={company.hash_id}
             value={company}
             >
-            {company.full_name}
+              <p>
+                {company.full_name}
+              </p>
+              
+              <p className='opacity-25 justify-self-end text-sm'>
+                updated on {getDateAsYMD(company.updated_at)}
+              </p>
             </Listbox.Option>
         ))}
         </Listbox.Options>
         </>
     )}
     </Listbox>
-
     );
-    
 }

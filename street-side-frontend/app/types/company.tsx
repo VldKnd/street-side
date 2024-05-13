@@ -3,6 +3,7 @@ export interface CompanyInterface {
     full_name: string,
     home_url: string,
     created_at: string,
+    updated_at: string,
     hash_id: string,
 }
 
