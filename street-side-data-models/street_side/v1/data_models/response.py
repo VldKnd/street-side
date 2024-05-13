@@ -10,6 +10,7 @@ class CompanyGetRequestResponse(pydantic.BaseModel):
     home_url: str
     created_at: datetime.datetime | None
     hash_id: str
+    updated_at: datetime.datetime | None
 
 
 class DocumentTypeGetRequestResponse(pydantic.BaseModel):
