@@ -44,6 +44,7 @@ class CompanyRepository():
                 _object.full_name,
                 _object.home_url,
                 _object.created_at,
+                _object.updated_at,
             )
             for hash_id, _object in companies.items()
         ]
