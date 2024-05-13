@@ -52,6 +52,7 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
     )
 
     driver.get(url)
+    time.sleep(1)
     content = driver.page_source
     soup = BeautifulSoup(content, 'html.parser')
     links = soup.find_all("a")
