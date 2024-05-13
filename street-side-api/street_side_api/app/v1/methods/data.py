@@ -1,7 +1,6 @@
 
 from logging import getLogger
 from typing import List, Tuple
-from xmlrpc.client import APPLICATION_ERROR
 
 from street_side.v1.data_models.configuration import SharedSettings
 from street_side.v1.data_models.excel import ExcelFile
@@ -103,6 +102,7 @@ async def get_all_companies() -> List[CompanyGetRequestResponse]:
             full_name=company.full_name,
             home_url=company.home_url,
             created_at=company.created_at,
-            hash_id=company.hash_id
+            hash_id=company.hash_id,
+            updated_at=company.updated_at,
         ) for company in companies
     ]
