@@ -227,9 +227,13 @@ class DocumentStorage(pydantic.BaseModel):
     def download_document_to_local_disk(self, document: Document):
         path_to_file = self.get_path_to_file_from_document(document)
         if os.path.exists(path_to_file): return
+        
         headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
+            "Accept-Encoding":"gzip, deflate, br",
+            "User-Agent":"Java-http-client/",
+            "Accept-Language":"en-US,en;q=0.9"
         }
+        
         response = requests.get(
             url=document.remote_url,
             headers=headers,
