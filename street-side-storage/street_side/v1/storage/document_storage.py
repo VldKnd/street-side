@@ -2,11 +2,15 @@ import asyncio
 import base64
 import logging
 import os
+import time
 from typing import Dict, List, Tuple
 
 import asyncpg
 import pydantic
 import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium_stealth import stealth
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
@@ -223,13 +227,43 @@ class DocumentStorage(pydantic.BaseModel):
     def download_document_to_local_disk(self, document: Document):
         path_to_file = self.get_path_to_file_from_document(document)
         if os.path.exists(path_to_file): return
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
-        }
-        response = requests.get(
-            url=document.remote_url,
-            headers=headers
-        )
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
+            }
+            response = requests.get(
+                url=document.remote_url,
+                headers=headers,
+                timeout=5,
+            )
+        except requests.exceptions.ReadTimeout:
+            chrome_options = Options()
+            chrome_options.add_argument("start-maximized")
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--no-sandbox")
+            chrome_options.add_argument("--disable-dev-shm-usage")
+            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_experimental_option('useAutomationExtension', False)
+            chrome_prefs = {}
+            chrome_prefs["profile.default_content_settings"] = {"images": 2}
+            chrome_options.experimental_options["prefs"] = chrome_prefs
+
+            driver = webdriver.Chrome(options=chrome_options)
+
+            stealth(
+                driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+            )
+
+            driver.get(document.remote_url)
+            time.sleep(1)
+            content = driver.page_source
+
         file_on_local_disk = open(path_to_file, mode='wb+')
         file_on_local_disk.write(response.content)
         file_on_local_disk.close()
