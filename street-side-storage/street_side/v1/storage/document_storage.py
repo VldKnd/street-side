@@ -8,9 +8,6 @@ from typing import Dict, List, Tuple
 import asyncpg
 import pydantic
 import requests
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium_stealth import stealth
 from street_side.v1.data_models.company import Company
 from street_side.v1.data_models.document import Document
 from street_side.v1.data_models.document_type import DocumentType
@@ -229,7 +226,6 @@ class DocumentStorage(pydantic.BaseModel):
         if os.path.exists(path_to_file): return
         
         headers = {
-            "Accept-Encoding":"gzip, deflate, br",
             "User-Agent":"Java-http-client/",
             "Accept-Language":"en-US,en;q=0.9"
         }
