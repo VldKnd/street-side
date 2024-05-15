@@ -1,0 +1,9 @@
+{
+    "scrapper_web_pages" : {
+        "nasdaq": {
+            "company_name": "Nasdaq",
+            "full_name": "Nasdaq's Central Counterparty Clearing House",
+            "url": "https://www.nasdaq.com/solutions/about-nasdaq-clearing"
+        }
+    }
+}
