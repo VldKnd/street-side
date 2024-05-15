@@ -95,9 +95,9 @@ def find_and_filter_links(web_page: WebPage) -> Tuple[
         if extension.startswith(".zip"):
             extension = ".zip"
         elif extension.startswith(".pdf"):
-            extension = ".zip"
+            extension = ".pdf"
         elif extension.startswith(".xlsx"):
-            extension = ".zip"
+            extension = ".xlsx"
 
         scrapped_document_type = DocumentType(
             company_hash_id=scrapped_company.hash_id,
